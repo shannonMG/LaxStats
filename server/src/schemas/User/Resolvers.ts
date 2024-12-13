@@ -35,10 +35,13 @@ const userResolvers = {
         if (context.user) {
           return await User.findOne({ _id: context.user._id });
         }
-        throw AuthenticationError;
+        throw new AuthenticationError('You must be logged in to access this data.');
+
       },
-      
     },
+    
+
+    
   
 
   Mutation: {
