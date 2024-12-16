@@ -1,3 +1,15 @@
 import { gql } from '@apollo/client';
 
-// need to use the sandbox to fill in the queries
+export const QUERY_ME = gql`
+    query Query {
+        me {
+            _id
+            name
+            password
+            role
+            username
+        }
+    }
+`;
+
+// need to add more queries
