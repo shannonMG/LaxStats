@@ -67,6 +67,35 @@ const practiceResolvers = {
                 throw new Error('Error creating practice: Unknown error occurred.');
             }
         },
+        // SK adding this for stats updates
+        updateDroppedBalls: async (_, { playerId, droppedBalls }) => {
+            try {
+                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $set: { 'players.$.droppedBalls': droppedBalls } }, { new: true });
+                if (!updatedPractice) {
+                    throw new Error('Player or practice not found');
+                }
+                return updatedPractice;
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error('Failed to update dropped balls');
+            }
+            ;
+        },
+        //SK added this for updated Completed Passes
+        updateCompletedPasses: async (_, { playerId, completedPasses }) => {
+            try {
+                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $set: { 'players.$.completedPasses': completedPasses } }, { new: true });
+                if (!updatedPractice) {
+                    throw new Error('Player or Practice not found');
+                }
+                return updatedPractice;
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error('Failed to update completed passes');
+            }
+        }
         // updatePractice: (args: newPlayerArray)
         // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
         // addPlayerToPractice: (args: practiceId, playerId)

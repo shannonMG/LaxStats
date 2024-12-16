@@ -111,39 +111,39 @@ const practiceResolvers = {
     },
 
       // SK adding this for stats updates
-      updateDroppedBalls: async(_: any, { playerId, droppedBalls}: UpdatePlayerStatArgs)=> {
+      updateDroppedBalls: async(_: any, { playerId, droppedBalls}: PlayerStats): Promise<IPractice>=> {
         try{
           const updatedPractice=await Practice.findOneAndUpdate (
             {'players.playerId': playerId},
-            {$set: {'players.$droppedBalls': droppedBalls}},
+            {$set: {'players.$.droppedBalls': droppedBalls}},
             {new: true}
             
 
           );
 
           if (!updatedPractice) {
-            throw new Error('Player or practice not found')
+            throw new Error('Player or practice not found');
           }
           return updatedPractice; 
         } catch(error){
           console.error(error);
-          throw new Error ('Failed to update dropped balls')
-        }
+          throw new Error ('Failed to update dropped balls');
+        };
 
-        }
+        },
 //SK added this for updated Completed Passes
-        updateCompletedPasses: async(_: any, { playerId, completedPasses}: UpdatePlayerStatsArgs)=> {
+        updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
           try{
             const updatedPractice=await Practice.findOneAndUpdate (
-              {'players:playerId': playerId},
-              {$set: { 'players.$completedPasses': completedPasses}},
+              {'players.playerId': playerId},
+              {$set: { 'players.$.completedPasses': completedPasses}},
               {new: true}
               
   
             );
   
             if (!updatedPractice) {
-              throw new Error('Player or Practice not found')
+              throw new Error('Player or Practice not found');
             }
             return updatedPractice; 
           } catch(error){

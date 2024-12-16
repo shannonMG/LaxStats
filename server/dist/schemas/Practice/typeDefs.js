@@ -31,6 +31,8 @@ type Practice {
 # Mutation type for creating a new practice
 type Mutation {
   addPractice: Practice!
+  updateDroppedBalls(playerId: ID!, droppedBalls: Int!): Practice
+  updateCompletedPasses(playerId: ID!, completedPasses: Int!): Practice
 }
 
 # Query type for fetching practices
@@ -38,5 +40,14 @@ type Query {
   practices: [Practice!]!
   practice(id: ID!): Practice
 }
+
+# SK added these mutations for updated stats taking into account the playerID
+
+ 
+
+  
+
+  
+
 `;
 export default practiceTypeDefs;
