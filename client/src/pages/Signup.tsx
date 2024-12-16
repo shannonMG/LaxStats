@@ -43,59 +43,58 @@ const Signup = () => {
         <main>
             <div>
                 <div>
-                    <h4>
-                        <div>
-                            {data? (
-                                <p>
-                                    Success! You may now head{' '}
-                                    <Link to='/'>back to the homepage.</Link>
-                                </p>
-                            ) : (
-                                <form onSubmit={handleFormSubmit}>
-                                    <input
-                                        placeholder="Your name"
-                                        name="name"
-                                        type="text"
-                                        value={formState.name}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        placeholder="********"
-                                        name="password"
-                                        type="text"
-                                        value={formState.password}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        placeholder="Your role"
-                                        name="role"
-                                        type="text"
-                                        value={formState.role}
-                                        onChange={handleChange}
-                                    />
-                                    <input
-                                        placeholder="Your username"
-                                        name="username"
-                                        type="text"
-                                        value={formState.username}
-                                        onChange={handleChange}
-                                    />
-                                    <button
-                                        style={{ cursor: 'pointer'}}
-                                        type="submit"
-                                    >
-                                        Submit
-                                    </button>                                    
-                                </form>
-                            )}
+                    <h4>Sign up</h4>
+                    <div>
+                        {data? (
+                            <p>
+                                Success! You may now head{' '}
+                                <Link to='/'>back to the homepage.</Link>
+                            </p>
+                        ) : (
+                            <form onSubmit={handleFormSubmit}>
+                                <input
+                                    placeholder="Your name"
+                                    name="name"
+                                    type="text"
+                                    value={formState.name}
+                                    onChange={handleChange}
+                                />
+                                <input
+                                    placeholder="********"
+                                    name="password"
+                                    type="text"
+                                    value={formState.password}
+                                    onChange={handleChange}
+                                />
+                                <input
+                                    placeholder="Your role"
+                                    name="role"
+                                    type="text"
+                                    value={formState.role}
+                                    onChange={handleChange}
+                                />
+                                <input
+                                    placeholder="Your username"
+                                    name="username"
+                                    type="text"
+                                    value={formState.username}
+                                    onChange={handleChange}
+                                />
+                                <button
+                                    style={{ cursor: 'pointer'}}
+                                    type="submit"
+                                >
+                                    Submit
+                                </button>                                    
+                            </form>
+                        )}
 
-                            {error && (
-                                <div>
-                                    {error.message}
-                                </div>
-                            )}
-                        </div>
-                    </h4>
+                        {error && (
+                            <div>
+                                {error.message}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </main>
