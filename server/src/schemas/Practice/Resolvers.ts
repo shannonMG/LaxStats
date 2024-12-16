@@ -27,10 +27,31 @@ interface Context {
 }
 
 // Define the arguments for the addPractice mutation (empty in this case)
-interface AddPracticeArgs {}
+interface AddPracticeArgs { }
 
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
+  Query: {
+    // practices: async (_parent: any, _args: any, context: Context): Promise<Practice[] | null> => {
+    //   if (context.user) {
+    //     return await Practice.find();
+    //   }
+    //   throw new AuthenticationError('You must be logged in to access this data.');
+    // },
+
+    // practice: async (_parent: any, args: { practiceId: String}, context: Context): Promise<Practice | null> => {
+    //   if (context.user) {
+    //     return await Practice.findById(practiceId);
+    //   }
+    //   throw new AuthenticationError('You must be logged in to access this data.');
+    // },
+
+
+    // getPlayerStats: (args: practiceId) <--- if player wants to see their own stats
+
+  },
+
+
   Mutation: {
     addPractice: async (_: any, __: AddPracticeArgs, context: Context): Promise<IPractice> => {
       try {
@@ -49,7 +70,7 @@ const practiceResolvers = {
         const currentDate = new Date();
 
         // Fetch all users with the role of 'player' from the database
-        const allPlayers = await User.find({ role: 'player' }) as Array<{_id:Types.ObjectId }>;
+        const allPlayers = await User.find({ role: 'player' }) as Array<{ _id: Types.ObjectId }>;
 
         // If no players are found, throw an error
         if (!allPlayers || allPlayers.length === 0) {
@@ -62,7 +83,7 @@ const practiceResolvers = {
           droppedBalls: 0,                 // Initialize droppedBalls to 0
           completedPasses: 0,              // Initialize completedPasses to 0
         }));
-
+    
         // Create a new instance of the Practice model with the current date, coach ID, and player stats
         const newPractice = new Practice({
           date: currentDate,   // Set the date to the current date
@@ -88,6 +109,76 @@ const practiceResolvers = {
         throw new Error('Error creating practice: Unknown error occurred.');
       }
     },
+
+      // SK adding this for stats updates
+      updateDroppedBalls: async(_: any, { playerId, droppedBalls}: UpdatePlayerStatArgs)=> {
+        try{
+          const updatedPractice=await Practice.findOneAndUpdate (
+            {'players.playerId': playerId},
+            {$set: {'players.$droppedBalls': droppedBalls}},
+            {new: true}
+            
+
+          );
+
+          if (!updatedPractice) {
+            throw new Error('Player or practice not found')
+          }
+          return updatedPractice; 
+        } catch(error){
+          console.error(error);
+          throw new Error ('Failed to update dropped balls')
+        }
+
+        }
+//SK added this for updated Completed Passes
+        updateCompletedPasses: async(_: any, { playerId, completedPasses}: UpdatePlayerStatsArgs)=> {
+          try{
+            const updatedPractice=await Practice.findOneAndUpdate (
+              {'players:playerId': playerId},
+              {$set: { 'players.$completedPasses': completedPasses}},
+              {new: true}
+              
+  
+            );
+  
+            if (!updatedPractice) {
+              throw new Error('Player or Practice not found')
+            }
+            return updatedPractice; 
+          } catch(error){
+            console.error(error);
+            throw new Error ('Failed to update completed passes')
+          }
+  
+          }
+
+    // updatePractice: (args: newPlayerArray)
+    // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
+
+
+    // addPlayerToPractice: (args: practiceId, playerId)
+    // Practice.findAndUpdate({$addToSet: { players: playerId} })
+
+    // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
+    /* 
+      const targetPractice = Practice.find(practiceId);
+
+      const updatedPlayers = targetPractice.players.map(player => {
+          if(player.playerId == playerId) {
+            return {
+              ...player,
+              droppedBalls: newDroppedBalls,
+              completedPasses: newCompletedPasses
+            }
+          } else {
+            return player; 
+          }
+      })
+
+     Practice.findAndUpdate({$set: { players: updatedPlayers} })
+
+    */
   },
 };
 

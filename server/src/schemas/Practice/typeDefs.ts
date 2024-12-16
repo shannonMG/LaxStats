@@ -38,6 +38,16 @@ type Query {
   practices: [Practice!]!
   practice(id: ID!): Practice
 }
+
+# SK added these mutations for updated stats taking into account the playerID
+
+type Mutation {
+
+  updateDroppedBalls(playerId: ID!, droppedBalls: Int!): PlayerStats
+  updateCompletedPasses(playerId: ID!, completedPasses: Int!): PlayerStats
+}
+  
+
 `
 
 export default practiceTypeDefs;

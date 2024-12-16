@@ -4,6 +4,21 @@ import { AuthenticationError } from 'apollo-server-errors'; // Import Apollo err
 import { Types } from 'mongoose'; // Import Mongoose types for type-checking
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
+    Query: {
+    // practices: async (_parent: any, _args: any, context: Context): Promise<Practice[] | null> => {
+    //   if (context.user) {
+    //     return await Practice.find();
+    //   }
+    //   throw new AuthenticationError('You must be logged in to access this data.');
+    // },
+    // practice: async (_parent: any, args: { practiceId: String}, context: Context): Promise<Practice | null> => {
+    //   if (context.user) {
+    //     return await Practice.findById(practiceId);
+    //   }
+    //   throw new AuthenticationError('You must be logged in to access this data.');
+    // },
+    // getPlayerStats: (args: practiceId) <--- if player wants to see their own stats
+    },
     Mutation: {
         addPractice: async (_, __, context) => {
             try {
@@ -52,6 +67,29 @@ const practiceResolvers = {
                 throw new Error('Error creating practice: Unknown error occurred.');
             }
         },
+        // updatePractice: (args: newPlayerArray)
+        // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
+        // addPlayerToPractice: (args: practiceId, playerId)
+        // Practice.findAndUpdate({$addToSet: { players: playerId} })
+        // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
+        /*
+          const targetPractice = Practice.find(practiceId);
+    
+          const updatedPlayers = targetPractice.players.map(player => {
+              if(player.playerId == playerId) {
+                return {
+                  ...player,
+                  droppedBalls: newDroppedBalls,
+                  completedPasses: newCompletedPasses
+                }
+              } else {
+                return player;
+              }
+          })
+    
+         Practice.findAndUpdate({$set: { players: updatedPlayers} })
+    
+        */
     },
 };
 export default practiceResolvers; // Export the resolvers

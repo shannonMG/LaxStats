@@ -8,6 +8,14 @@ const userResolvers = {
             }
             throw new AuthenticationError('You must be logged in to access this data.');
         },
+        users: async (_parent, _args, context) => {
+            if (context.user) {
+                return await User.find({
+                    role: "player"
+                });
+            }
+            throw new AuthenticationError('You must be logged in to access this data.');
+        },
     },
     Mutation: {
         addUser: async (_parent, { input }) => {
