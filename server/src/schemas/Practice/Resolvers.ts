@@ -29,29 +29,45 @@ interface Context {
 // Define the arguments for the addPractice mutation (empty in this case)
 interface AddPracticeArgs { }
 
+interface PlayerStatsArgs {
+  practiceId: string; // The ID of the practice document
+  playerId: string;   // The ID of the player to find stats for
+}
+
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
   Query: {
-    // practices: async (_parent: any, _args: any, context: Context): Promise<Practice[] | null> => {
-    //   if (context.user) {
-    //     return await Practice.find();
-    //   }
-    //   throw new AuthenticationError('You must be logged in to access this data.');
-    // },
+    getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
+      try {
+        // 1. Find the practice document by its ID
+        const practice = await Practice.findById(practiceId);
+        if (!practice) {
+          throw new Error('Practice document not found.');
+        }
 
-    // practice: async (_parent: any, args: { practiceId: String}, context: Context): Promise<Practice | null> => {
-    //   if (context.user) {
-    //     return await Practice.findById(practiceId);
-    //   }
-    //   throw new AuthenticationError('You must be logged in to access this data.');
-    // },
+        // 2. Find the player stats within the players array
+        const playerStats = practice.players.find(
+          (player) => player.playerId.toString() === playerId
+        );
 
+        if (!playerStats) {
+          throw new Error('Player stats not found in this practice.');
+        }
 
-    // getPlayerStats: (args: practiceId) <--- if player wants to see their own stats
+        // 3. Return the player's stats
+        return {
+          playerId: playerStats.playerId,
+          droppedBalls: playerStats.droppedBalls,
+          completedPasses: playerStats.completedPasses,
+        };
+      } catch (error) {
+        console.error('Error fetching player stats:', error);
+        throw new Error('Failed to fetch player stats.');
+      }
+    },
 
   },
-
-
+  
   Mutation: {
     addPractice: async (_: any, __: AddPracticeArgs, context: Context): Promise<IPractice> => {
       try {

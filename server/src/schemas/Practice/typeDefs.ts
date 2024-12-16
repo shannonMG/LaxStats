@@ -28,6 +28,8 @@ type Practice {
   players: [PlayerStats!]! # Array of players with stats
 }
 
+
+
 # Mutation type for creating a new practice
 type Mutation {
   addPractice: Practice!
@@ -39,6 +41,7 @@ type Mutation {
 type Query {
   practices: [Practice!]!
   practice(id: ID!): Practice
+  getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats!
 }
 
 # SK added these mutations for updated stats taking into account the playerID
