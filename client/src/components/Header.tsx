@@ -20,7 +20,7 @@ const Header = () => {
                     {Auth.loggedIn()? (
                         <>
                             <Link to='/me'>
-                                {Auth.getProfile().data.username}'s profile
+                                {Auth.getDashboard().data.username}'s profile
                             </Link>
                             <button onClick={logout}>
                                 Logout
@@ -31,7 +31,7 @@ const Header = () => {
                             <Link to='/login'>
                                 Login
                             </Link>
-                            <Link to='signup'>
+                            <Link to='/signup'>
                                 Signup
                             </Link>
                         </>
