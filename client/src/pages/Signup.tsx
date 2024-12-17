@@ -10,13 +10,22 @@ const Signup = () => {
     const [formState, setFormState] = useState({
         name: '',
         password: '',
-        role: '',
+        role: 'player',
         username: '',
     });
 
     const [addUser, {error, data }] = useMutation(ADD_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+
+        setFormState({
+            ...formState,
+            [name]: value,
+        });
+    };
+
+    const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target;
 
         setFormState({
@@ -66,13 +75,15 @@ const Signup = () => {
                                     value={formState.password}
                                     onChange={handleChange}
                                 />
-                                <input
-                                    placeholder="Your role"
-                                    name="role"
-                                    type="text"
-                                    value={formState.role}
-                                    onChange={handleChange}
-                                />
+                                <select 
+                                    id='options'
+                                    value = {formState.role} 
+                                    onChange = {handleSelectChange} 
+                                    name='role'
+                                    >
+                                    <option value='player'>Player</option>
+                                    <option value='coach'>Coach</option>
+                                </select>
                                 <input
                                     placeholder="Your username"
                                     name="username"
