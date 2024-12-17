@@ -5,6 +5,7 @@ import { Types } from 'mongoose'; // Import Mongoose types for type-checking
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
     Query: {
+        //this gets the stats for a given player at a give practice. 
         getPlayerStatsById: async (_parent, { practiceId, playerId }) => {
             try {
                 // 1. Find the practice document by its ID
@@ -27,6 +28,33 @@ const practiceResolvers = {
             catch (error) {
                 console.error('Error fetching player stats:', error);
                 throw new Error('Failed to fetch player stats.');
+            }
+        },
+        getPracticesForPlayer: async (_parent, { playerId }) => {
+            try {
+                // Find all practices that this player is part of
+                const playerPractices = await Practice.find({ 'players.playerId': playerId });
+                // If no practices are found, you can decide what to return:
+                if (!playerPractices || playerPractices.length === 0) {
+                    return []; // return an empty array, or you could throw an error
+                }
+                // Return an array of practices, possibly including the player's specific stats
+                return playerPractices.map((practice) => {
+                    const playerStats = practice.players.find((player) => player.playerId.toString() === playerId);
+                    if (!playerStats) {
+                        throw new Error('Player stats not found.');
+                    }
+                    // Now `playerStats` is guaranteed to be defined.
+                    return {
+                        practiceId: practice._id,
+                        droppedBalls: playerStats.droppedBalls,
+                        completedPasses: playerStats.completedPasses,
+                    };
+                });
+            }
+            catch (error) {
+                console.error('Error fetching practices for player:', error);
+                throw new Error('Failed to fetch practices for player.');
             }
         },
     },
@@ -81,10 +109,7 @@ const practiceResolvers = {
         // SK adding this for stats updates
         updateDroppedBalls: async (_, { playerId, droppedBalls }) => {
             try {
-                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $inc: { 'players.$.droppedBalls': droppedBalls } }, {
-                    new: true,
-                    sort: { time: -1 } // Ensures we pick the most recent practice
-                });
+                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $inc: { 'players.$.droppedBalls': droppedBalls } }, { new: true });
                 if (!updatedPractice) {
                     throw new Error('Player or practice not found');
                 }
@@ -94,6 +119,7 @@ const practiceResolvers = {
                 console.error(error);
                 throw new Error('Failed to update dropped balls');
             }
+            ;
         },
         //SK added this for updated Completed Passes
         updateCompletedPasses: async (_, { playerId, completedPasses }) => {
