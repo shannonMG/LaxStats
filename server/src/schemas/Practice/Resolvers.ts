@@ -131,7 +131,7 @@ const practiceResolvers = {
         try{
           const updatedPractice=await Practice.findOneAndUpdate (
             {'players.playerId': playerId},
-            {$set: {'players.$.droppedBalls': droppedBalls}},
+            {$inc: {'players.$.droppedBalls': droppedBalls}},
             {new: true}
             
 
