@@ -25,6 +25,15 @@ const Signup = () => {
         });
     };
 
+    const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target;
+
+        setFormState({
+            ...formState,
+            [name]: value,
+        });
+    };
+
     const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
@@ -66,13 +75,14 @@ const Signup = () => {
                                     value={formState.password}
                                     onChange={handleChange}
                                 />
-                                <input
-                                    placeholder="Your role"
-                                    name="role"
-                                    type="text"
-                                    value={formState.role}
-                                    onChange={handleChange}
-                                />
+                                <select 
+                                    id='options' 
+                                    value = {formState.role} 
+                                    onChange = {handleSelectChange} 
+                                    name='role'>
+                                    <option value='player'>Player</option>
+                                    <option value='coach'>Coach</option>
+                                </select>
                                 <input
                                     placeholder="Your username"
                                     name="username"
