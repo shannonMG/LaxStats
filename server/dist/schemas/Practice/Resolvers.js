@@ -81,10 +81,7 @@ const practiceResolvers = {
         // SK adding this for stats updates
         updateDroppedBalls: async (_, { playerId, droppedBalls }) => {
             try {
-                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $inc: { 'players.$.droppedBalls': droppedBalls } }, {
-                    new: true,
-                    sort: { time: -1 } // Ensures we pick the most recent practice
-                });
+                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $inc: { 'players.$.droppedBalls': droppedBalls } }, { new: true });
                 if (!updatedPractice) {
                     throw new Error('Player or practice not found');
                 }
@@ -94,6 +91,7 @@ const practiceResolvers = {
                 console.error(error);
                 throw new Error('Failed to update dropped balls');
             }
+            ;
         },
         //SK added this for updated Completed Passes
         updateCompletedPasses: async (_, { playerId, completedPasses }) => {
