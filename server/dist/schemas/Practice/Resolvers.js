@@ -57,6 +57,13 @@ const practiceResolvers = {
                 throw new Error('Failed to fetch practices for player.');
             }
         },
+        getPractice: async (_parent, { practiceId }) => {
+            const practice = await Practice.findById(practiceId);
+            if (!practice) {
+                throw new Error('Practice not found');
+            }
+            return practice;
+        },
     },
     Mutation: {
         addPractice: async (_, __, context) => {
@@ -121,43 +128,58 @@ const practiceResolvers = {
             }
             ;
         },
-        //SK added this for updated Completed Passes
-        updateCompletedPasses: async (_, { playerId, completedPasses }) => {
-            try {
-                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $set: { 'players.$.completedPasses': completedPasses } }, { new: true });
-                if (!updatedPractice) {
-                    throw new Error('Player or Practice not found');
-                }
-                return updatedPractice;
+        //This shouuld update any player stat, insetad of creating new mutaions each time we create add a statistic to track
+        updatePlayerStat: async (_parent, { practiceId, playerId, statName, increment }) => {
+            if (!['droppedBalls', 'completedPasses'].includes(statName)) {
+                throw new Error('Invalid stat name');
             }
-            catch (error) {
-                console.error(error);
-                throw new Error('Failed to update completed passes');
+            const updateField = `players.$.${statName}`;
+            const updatedPractice = await Practice.findOneAndUpdate({ _id: practiceId, 'players.playerId': playerId }, { $inc: { [updateField]: increment } }, { new: true });
+            if (!updatedPractice) {
+                throw new Error('Player or practice not found');
             }
-        }
-        // updatePractice: (args: newPlayerArray)
-        // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
-        // addPlayerToPractice: (args: practiceId, playerId)
-        // Practice.findAndUpdate({$addToSet: { players: playerId} })
-        // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
-        /*
-          const targetPractice = Practice.find(practiceId);
-    
-          const updatedPlayers = targetPractice.players.map(player => {
-              if(player.playerId == playerId) {
-                return {
-                  ...player,
-                  droppedBalls: newDroppedBalls,
-                  completedPasses: newCompletedPasses
-                }
-              } else {
-                return player;
-              }
-          })
-    
-         Practice.findAndUpdate({$set: { players: updatedPlayers} })
-    
-        */
+            return updatedPractice;
+        },
     },
+    //SK added this for updated Completed Passes
+    // updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
+    //   try{
+    //     const updatedPractice=await Practice.findOneAndUpdate (
+    //       {'players.playerId': playerId},
+    //       {$set: { 'players.$.completedPasses': completedPasses}},
+    //       {new: true}
+    //     );
+    //     if (!updatedPractice) {
+    //       throw new Error('Player or Practice not found');
+    //     }
+    //     return updatedPractice; 
+    //   } catch(error){
+    //     console.error(error);
+    //     throw new Error ('Failed to update completed passes')
+    //   }
+    //   }
+    // updatePractice: (args: newPlayerArray)
+    // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
+    // addPlayerToPractice: (args: practiceId, playerId)
+    // Practice.findAndUpdate({$addToSet: { players: playerId} })
+    // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
+    /*
+      const targetPractice = Practice.find(practiceId);
+
+      const updatedPlayers = targetPractice.players.map(player => {
+          if(player.playerId == playerId) {
+            return {
+              ...player,
+              droppedBalls: newDroppedBalls,
+              completedPasses: newCompletedPasses
+            }
+          } else {
+            return player;
+          }
+      })
+
+     Practice.findAndUpdate({$set: { players: updatedPlayers} })
+
+    */
 };
 export default practiceResolvers; // Export the resolvers

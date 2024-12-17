@@ -28,14 +28,6 @@ type PlayerPracticeData {
   
 }
 
-extend type Query {
-  # Given a playerId, return all practices that the player is part of,
-  # along with their stats in each.
-  getPracticesForPlayer(playerId: ID!): [PlayerPracticeData!]!
-
-}
-
-
 # Main Practice type
 type Practice {
   id: ID!
@@ -51,8 +43,16 @@ type Mutation {
   addPractice: Practice!
   updateDroppedBalls(playerId: ID!, droppedBalls: Int!): Practice
   updateCompletedPasses(playerId: ID!, completedPasses: Int!): Practice
+  updatePlayerStat(
+    practiceId: ID!,
+    playerId: ID!,
+    statName: String!,
+    increment: Int!
+  ): Practice!
 }
 
+
+# Query type for fetching practices
 # Query type for fetching practices
 type Query {
   practices: [Practice!]!
@@ -61,7 +61,9 @@ type Query {
   # Given a playerId, return all practices that the player is part of,
   # along with their stats in each.
   getPracticesForPlayer(playerId: ID!): [PlayerPracticeData!]!
+  getPractice(id: ID!): Practice
 }
+
 
 # SK added these mutations for updated stats taking into account the playerID
 

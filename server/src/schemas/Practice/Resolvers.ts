@@ -34,6 +34,14 @@ interface PlayerStatsArgs {
   playerId: string;   // The ID of the player to find stats for
 }
 
+interface UpdatePlayerStatArgs {
+  practiceId: string;    // The practice ID will typically be a string; GraphQL IDs map to strings in TS
+  playerId: string;      // The player ID will also typically be a string
+  statName: 'droppedBalls' | 'completedPasses'; // Restrict to known stat names if desired
+  increment: number;     // The increment is an integer to add or subtract
+}
+
+
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
   Query: {
@@ -96,6 +104,15 @@ const practiceResolvers = {
         throw new Error('Failed to fetch practices for player.');
       }
     },
+    getPractice: async (_parent: any, { practiceId }: {practiceId: string }) => {
+      const practice = await Practice.findById(practiceId);
+      if (!practice) {
+        throw new Error('Practice not found');
+      }
+      return practice;
+    },
+    
+    
     
   },
   
@@ -158,7 +175,7 @@ const practiceResolvers = {
     },
 
       // SK adding this for stats updates
-      updateDroppedBalls: async(_: any, { playerId, droppedBalls}: PlayerStats): Promise<IPractice>=> {
+    updateDroppedBalls: async(_: any, { playerId, droppedBalls}: PlayerStats): Promise<IPractice>=> {
         try{
           const updatedPractice=await Practice.findOneAndUpdate (
             {'players.playerId': playerId},
@@ -178,27 +195,49 @@ const practiceResolvers = {
         };
 
         },
+//This shouuld update any player stat, insetad of creating new mutaions each time we create add a statistic to track
+  updatePlayerStat: async (_parent: unknown,{ practiceId, playerId, statName, increment }: UpdatePlayerStatArgs ) => {
+        if (!['droppedBalls', 'completedPasses'].includes(statName)) {
+          throw new Error('Invalid stat name');
+        }
+
+        const updateField = `players.$.${statName}`;
+
+        const updatedPractice = await Practice.findOneAndUpdate(
+          { _id: practiceId, 'players.playerId': playerId },
+          { $inc: { [updateField]: increment } },
+          { new: true }
+        );
+
+        if (!updatedPractice) {
+          throw new Error('Player or practice not found');
+        }
+
+        return updatedPractice;
+      },
+    },
+
 //SK added this for updated Completed Passes
-        updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
-          try{
-            const updatedPractice=await Practice.findOneAndUpdate (
-              {'players.playerId': playerId},
-              {$set: { 'players.$.completedPasses': completedPasses}},
-              {new: true}
+        // updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
+        //   try{
+        //     const updatedPractice=await Practice.findOneAndUpdate (
+        //       {'players.playerId': playerId},
+        //       {$set: { 'players.$.completedPasses': completedPasses}},
+        //       {new: true}
               
   
-            );
+        //     );
   
-            if (!updatedPractice) {
-              throw new Error('Player or Practice not found');
-            }
-            return updatedPractice; 
-          } catch(error){
-            console.error(error);
-            throw new Error ('Failed to update completed passes')
-          }
+        //     if (!updatedPractice) {
+        //       throw new Error('Player or Practice not found');
+        //     }
+        //     return updatedPractice; 
+        //   } catch(error){
+        //     console.error(error);
+        //     throw new Error ('Failed to update completed passes')
+        //   }
   
-          }
+        //   }
 
     // updatePractice: (args: newPlayerArray)
     // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
@@ -226,7 +265,7 @@ const practiceResolvers = {
      Practice.findAndUpdate({$set: { players: updatedPlayers} })
 
     */
-  },
-};
+  }
+;
 
 export default practiceResolvers; // Export the resolvers
