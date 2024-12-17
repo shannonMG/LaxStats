@@ -4,32 +4,6 @@ import { AuthenticationError } from 'apollo-server-errors'; // Import Apollo err
 import { Types } from 'mongoose'; // Import Mongoose types for type-checking
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
-    Query: {
-        getPlayerStatsById: async (_parent, { practiceId, playerId }) => {
-            try {
-                // 1. Find the practice document by its ID
-                const practice = await Practice.findById(practiceId);
-                if (!practice) {
-                    throw new Error('Practice document not found.');
-                }
-                // 2. Find the player stats within the players array
-                const playerStats = practice.players.find((player) => player.playerId.toString() === playerId);
-                if (!playerStats) {
-                    throw new Error('Player stats not found in this practice.');
-                }
-                // 3. Return the player's stats
-                return {
-                    playerId: playerStats.playerId,
-                    droppedBalls: playerStats.droppedBalls,
-                    completedPasses: playerStats.completedPasses,
-                };
-            }
-            catch (error) {
-                console.error('Error fetching player stats:', error);
-                throw new Error('Failed to fetch player stats.');
-            }
-        },
-    },
     Mutation: {
         addPractice: async (_, __, context) => {
             try {
@@ -78,6 +52,58 @@ const practiceResolvers = {
                 throw new Error('Error creating practice: Unknown error occurred.');
             }
         },
+        // SK adding this for stats updates
+        updateDroppedBalls: async (_, { playerId, droppedBalls }) => {
+            try {
+                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $set: { 'players.$.droppedBalls': droppedBalls } }, { new: true });
+                if (!updatedPractice) {
+                    throw new Error('Player or practice not found');
+                }
+                return updatedPractice;
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error('Failed to update dropped balls');
+            }
+            ;
+        },
+        //SK added this for updated Completed Passes
+        updateCompletedPasses: async (_, { playerId, completedPasses }) => {
+            try {
+                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $set: { 'players.$.completedPasses': completedPasses } }, { new: true });
+                if (!updatedPractice) {
+                    throw new Error('Player or Practice not found');
+                }
+                return updatedPractice;
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error('Failed to update completed passes');
+            }
+        }
+        // updatePractice: (args: newPlayerArray)
+        // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
+        // addPlayerToPractice: (args: practiceId, playerId)
+        // Practice.findAndUpdate({$addToSet: { players: playerId} })
+        // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
+        /*
+          const targetPractice = Practice.find(practiceId);
+    
+          const updatedPlayers = targetPractice.players.map(player => {
+              if(player.playerId == playerId) {
+                return {
+                  ...player,
+                  droppedBalls: newDroppedBalls,
+                  completedPasses: newCompletedPasses
+                }
+              } else {
+                return player;
+              }
+          })
+    
+         Practice.findAndUpdate({$set: { players: updatedPlayers} })
+    
+        */
     },
 };
 export default practiceResolvers; // Export the resolvers
