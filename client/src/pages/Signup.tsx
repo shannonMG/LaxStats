@@ -10,7 +10,7 @@ const Signup = () => {
     const [formState, setFormState] = useState({
         name: '',
         password: '',
-        role: '',
+        role: 'player',
         username: '',
     });
 
@@ -76,10 +76,11 @@ const Signup = () => {
                                     onChange={handleChange}
                                 />
                                 <select 
-                                    id='options' 
+                                    id='options'
                                     value = {formState.role} 
                                     onChange = {handleSelectChange} 
-                                    name='role'>
+                                    name='role'
+                                    >
                                     <option value='player'>Player</option>
                                     <option value='coach'>Coach</option>
                                 </select>
