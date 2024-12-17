@@ -4,6 +4,32 @@ import { AuthenticationError } from 'apollo-server-errors'; // Import Apollo err
 import { Types } from 'mongoose'; // Import Mongoose types for type-checking
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
+    Query: {
+        getPlayerStatsById: async (_parent, { practiceId, playerId }) => {
+            try {
+                // 1. Find the practice document by its ID
+                const practice = await Practice.findById(practiceId);
+                if (!practice) {
+                    throw new Error('Practice document not found.');
+                }
+                // 2. Find the player stats within the players array
+                const playerStats = practice.players.find((player) => player.playerId.toString() === playerId);
+                if (!playerStats) {
+                    throw new Error('Player stats not found in this practice.');
+                }
+                // 3. Return the player's stats
+                return {
+                    playerId: playerStats.playerId,
+                    droppedBalls: playerStats.droppedBalls,
+                    completedPasses: playerStats.completedPasses,
+                };
+            }
+            catch (error) {
+                console.error('Error fetching player stats:', error);
+                throw new Error('Failed to fetch player stats.');
+            }
+        },
+    },
     Mutation: {
         addPractice: async (_, __, context) => {
             try {
