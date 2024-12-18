@@ -7,6 +7,8 @@ import Signup from './pages/Signup.js';
 import Login from './pages/Login.js';
 import Dashboard from './pages/Dashboard.js';
 import ErrorPage from './pages/Error.js';
+import CoachDashboard from './components/CoachDashboard.js';
+import PlayerDashboard from './components/PlayerDashboard.js';
 
 const router = createBrowserRouter([
     {
@@ -29,7 +31,15 @@ const router = createBrowserRouter([
             }, {
                 path: '/me',
                 element: <Dashboard />
-            }
+            },
+            {
+                path: '/coach-dashboard',
+                element: <CoachDashboard />
+            },
+            {
+                path: '/player-dashboard',
+                element: <PlayerDashboard />
+            },
         ]
     },
 ]);
