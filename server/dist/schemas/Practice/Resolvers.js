@@ -5,6 +5,7 @@ import { Types } from 'mongoose'; // Import Mongoose types for type-checking
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
     Query: {
+        //this gets the stats for a given player at a give practice. 
         getPlayerStatsById: async (_parent, { practiceId, playerId }) => {
             try {
                 // 1. Find the practice document by its ID
@@ -27,6 +28,33 @@ const practiceResolvers = {
             catch (error) {
                 console.error('Error fetching player stats:', error);
                 throw new Error('Failed to fetch player stats.');
+            }
+        },
+        getPracticesForPlayer: async (_parent, { playerId }) => {
+            try {
+                // Find all practices that this player is part of
+                const playerPractices = await Practice.find({ 'players.playerId': playerId });
+                // If no practices are found, you can decide what to return:
+                if (!playerPractices || playerPractices.length === 0) {
+                    return []; // return an empty array, or you could throw an error
+                }
+                // Return an array of practices, possibly including the player's specific stats
+                return playerPractices.map((practice) => {
+                    const playerStats = practice.players.find((player) => player.playerId.toString() === playerId);
+                    if (!playerStats) {
+                        throw new Error('Player stats not found.');
+                    }
+                    // Now `playerStats` is guaranteed to be defined.
+                    return {
+                        practiceId: practice._id,
+                        droppedBalls: playerStats.droppedBalls,
+                        completedPasses: playerStats.completedPasses,
+                    };
+                });
+            }
+            catch (error) {
+                console.error('Error fetching practices for player:', error);
+                throw new Error('Failed to fetch practices for player.');
             }
         },
     },
@@ -93,43 +121,58 @@ const practiceResolvers = {
             }
             ;
         },
-        //SK added this for updated Completed Passes
-        updateCompletedPasses: async (_, { playerId, completedPasses }) => {
-            try {
-                const updatedPractice = await Practice.findOneAndUpdate({ 'players.playerId': playerId }, { $set: { 'players.$.completedPasses': completedPasses } }, { new: true });
-                if (!updatedPractice) {
-                    throw new Error('Player or Practice not found');
-                }
-                return updatedPractice;
+        //This shouuld update any player stat, insetad of creating new mutaions each time we create add a statistic to track
+        updatePlayerStat: async (_parent, { practiceId, playerId, statName, increment }) => {
+            if (!['droppedBalls', 'completedPasses'].includes(statName)) {
+                throw new Error('Invalid stat name');
             }
-            catch (error) {
-                console.error(error);
-                throw new Error('Failed to update completed passes');
+            const updateField = `players.$.${statName}`;
+            const updatedPractice = await Practice.findOneAndUpdate({ _id: practiceId, 'players.playerId': playerId }, { $inc: { [updateField]: increment } }, { new: true });
+            if (!updatedPractice) {
+                throw new Error('Player or practice not found');
             }
-        }
-        // updatePractice: (args: newPlayerArray)
-        // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
-        // addPlayerToPractice: (args: practiceId, playerId)
-        // Practice.findAndUpdate({$addToSet: { players: playerId} })
-        // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
-        /*
-          const targetPractice = Practice.find(practiceId);
-    
-          const updatedPlayers = targetPractice.players.map(player => {
-              if(player.playerId == playerId) {
-                return {
-                  ...player,
-                  droppedBalls: newDroppedBalls,
-                  completedPasses: newCompletedPasses
-                }
-              } else {
-                return player;
-              }
-          })
-    
-         Practice.findAndUpdate({$set: { players: updatedPlayers} })
-    
-        */
+            return updatedPractice;
+        },
     },
+    //SK added this for updated Completed Passes
+    // updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
+    //   try{
+    //     const updatedPractice=await Practice.findOneAndUpdate (
+    //       {'players.playerId': playerId},
+    //       {$set: { 'players.$.completedPasses': completedPasses}},
+    //       {new: true}
+    //     );
+    //     if (!updatedPractice) {
+    //       throw new Error('Player or Practice not found');
+    //     }
+    //     return updatedPractice; 
+    //   } catch(error){
+    //     console.error(error);
+    //     throw new Error ('Failed to update completed passes')
+    //   }
+    //   }
+    // updatePractice: (args: newPlayerArray)
+    // Practice.findAndUpdate({ $set: {players: newPlayersArray}})
+    // addPlayerToPractice: (args: practiceId, playerId)
+    // Practice.findAndUpdate({$addToSet: { players: playerId} })
+    // updateStats : (args: practiceId, playerId, newDroppedBalls, newCompletedPasses)
+    /*
+      const targetPractice = Practice.find(practiceId);
+
+      const updatedPlayers = targetPractice.players.map(player => {
+          if(player.playerId == playerId) {
+            return {
+              ...player,
+              droppedBalls: newDroppedBalls,
+              completedPasses: newCompletedPasses
+            }
+          } else {
+            return player;
+          }
+      })
+
+     Practice.findAndUpdate({$set: { players: updatedPlayers} })
+
+    */
 };
 export default practiceResolvers; // Export the resolvers

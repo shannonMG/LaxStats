@@ -35,10 +35,32 @@ class AuthService {
         return loggedUser;
     }
 
-    login(idToken: string) {
-        localStorage.setItem('id_token', idToken);
-        window.location.assign('/');
+    getRole(): string | null {
+        // Decodes the token and returns the user's role
+        const token = this.getToken();
+        if (token) {
+            const decoded = jwtDecode<ExtendedJwt>(token);
+            return decoded?.data?.role || null;
+        }
+        return null;
     }
+
+    login(idToken: string) {
+        // Store the token
+        localStorage.setItem('id_token', idToken);
+
+        // Redirect to the appropriate dashboard based on the role
+        const role = this.getRole();
+
+        if (role === 'coach') {
+            window.location.assign('/coach-dashboard');
+        } else if (role === 'player') {
+            window.location.assign('/player-dashboard');
+        } else {
+            window.location.assign('/'); // Default case
+        }
+    }
+
 
     logout() {
         localStorage.removeItem('id_token');
