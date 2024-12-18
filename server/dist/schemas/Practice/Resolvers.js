@@ -57,12 +57,18 @@ const practiceResolvers = {
                 throw new Error('Failed to fetch practices for player.');
             }
         },
-        getPractice: async (_parent, { practiceId }) => {
-            const practice = await Practice.findById(practiceId);
-            if (!practice) {
-                throw new Error('Practice not found');
+        getPractice: async (_, { id }, { Practice }) => {
+            try {
+                const practice = await Practice.findById(id);
+                if (!practice) {
+                    throw new Error("Practice not found");
+                }
+                return practice;
             }
-            return practice;
+            catch (error) {
+                console.error("Error fetching practice:", error);
+                throw new Error("Internal Server Error");
+            }
         },
     },
     Mutation: {

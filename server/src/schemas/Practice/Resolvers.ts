@@ -104,16 +104,6 @@ const practiceResolvers = {
         throw new Error('Failed to fetch practices for player.');
       }
     },
-    getPractice: async (_parent: any, { practiceId }: {practiceId: string }) => {
-      const practice = await Practice.findById(practiceId);
-      if (!practice) {
-        throw new Error('Practice not found');
-      }
-      return practice;
-    },
-    
-    
-    
   },
   
   Mutation: {
@@ -196,26 +186,26 @@ const practiceResolvers = {
 
         },
 //This shouuld update any player stat, insetad of creating new mutaions each time we create add a statistic to track
-  updatePlayerStat: async (_parent: unknown,{ practiceId, playerId, statName, increment }: UpdatePlayerStatArgs ) => {
-        if (!['droppedBalls', 'completedPasses'].includes(statName)) {
-          throw new Error('Invalid stat name');
-        }
+    updatePlayerStat: async (_parent: unknown,{ practiceId, playerId, statName, increment }: UpdatePlayerStatArgs ) => {
+          if (!['droppedBalls', 'completedPasses'].includes(statName)) {
+            throw new Error('Invalid stat name');
+          }
 
-        const updateField = `players.$.${statName}`;
+          const updateField = `players.$.${statName}`;
 
-        const updatedPractice = await Practice.findOneAndUpdate(
-          { _id: practiceId, 'players.playerId': playerId },
-          { $inc: { [updateField]: increment } },
-          { new: true }
-        );
+          const updatedPractice = await Practice.findOneAndUpdate(
+            { _id: practiceId, 'players.playerId': playerId },
+            { $inc: { [updateField]: increment } },
+            { new: true }
+          );
 
-        if (!updatedPractice) {
-          throw new Error('Player or practice not found');
-        }
+          if (!updatedPractice) {
+            throw new Error('Player or practice not found');
+          }
 
-        return updatedPractice;
+          return updatedPractice;
+        },
       },
-    },
 
 //SK added this for updated Completed Passes
         // updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
