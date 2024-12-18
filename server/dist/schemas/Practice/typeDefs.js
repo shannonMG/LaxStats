@@ -61,7 +61,6 @@ type Query {
   # Given a playerId, return all practices that the player is part of,
   # along with their stats in each.
   getPracticesForPlayer(playerId: ID!): [PlayerPracticeData!]!
-  getPractice(id: ID!): Practice
 }
 
 
