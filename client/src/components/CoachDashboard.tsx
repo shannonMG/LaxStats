@@ -1,4 +1,8 @@
+import { Navigate, useParams } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
 
+import PreviousPractices from './PreviousPractices';
+import PracticeDashboard from './PracticeDashboard';
 
 const CoachDashboard = () => {
     return (

@@ -19,7 +19,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />
+                element: <Dashboard />
             }, {
                 path: '/login',
                 element: <Login />
@@ -32,14 +32,6 @@ const router = createBrowserRouter([
             }, {
                 path: '/me',
                 element: <Dashboard />
-            },
-            {
-                path: '/coach-dashboard',
-                element: <CoachDashboard />
-            },
-            {
-                path: '/player-dashboard',
-                element: <PlayerDashboard />
             },
             {
                 path: '/stat-button',
