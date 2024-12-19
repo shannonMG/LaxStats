@@ -42,6 +42,8 @@ interface UpdatePlayerStatArgs {
 }
 
 
+
+
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
   Query: {
@@ -104,7 +106,10 @@ const practiceResolvers = {
         throw new Error('Failed to fetch practices for player.');
       }
     },
+    
   },
+
+
   
   Mutation: {
     addPractice: async (_: any, __: AddPracticeArgs, context: Context): Promise<IPractice> => {

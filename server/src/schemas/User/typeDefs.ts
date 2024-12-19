@@ -24,6 +24,15 @@ input UserInput {
     token: ID!
     user: User
   }
+  
+  type PlayerStats {
+    completedPasses: Int
+    droppedBalls: Int
+  }
+
+  type Query {
+    players: [User!]!
+  }
 
 
 

@@ -36,6 +36,11 @@ type Practice {
   players: [PlayerStats!]! # Array of players with stats
 }
 
+type Player {
+  _id: ID!
+  name: String!
+  stats: PlayerStats!
+}
 
 
 # Mutation type for creating a new practice

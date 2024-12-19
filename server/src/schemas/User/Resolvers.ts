@@ -47,6 +47,17 @@ const userResolvers = {
       }
       throw new AuthenticationError('You must be logged in to access this data.');
     },
+
+    players: async () => {
+          try {
+            // Find all users where the role is "player"
+            const playerUsers = await User.find({ role: 'player' });
+            return playerUsers;
+          } catch (err) {
+            console.error('Error fetching players:', (err as Error).message);
+            throw new Error('Failed to fetch players');
+          }
+        },
   },
 
 
