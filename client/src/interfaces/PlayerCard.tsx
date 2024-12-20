@@ -5,6 +5,5 @@ export interface PlayerCardProps {
   stats: {
     completedPasses: number; // Initial value for completed passes.
     droppedBalls: number; // Initial value for dropped balls.
-    thrownAwayPasses: number; // Initial value for thrown away passes.
   };
 }

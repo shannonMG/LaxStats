@@ -12,7 +12,17 @@ const StatButton: React.FC<StatButtonProps> = ({
 }) => {
   // Initialize the mutation hook with the UPDATE_PLAYER_STAT mutation.
   // Apollo's useMutation returns a function to trigger the mutation and an object with status details.
-  const [updatePlayerStat, { loading, error }] = useMutation(UPDATE_PLAYER_STAT);
+  const [updatePlayerStat, { loading, error }] = useMutation(UPDATE_PLAYER_STAT, {
+    // Add refetchQueries to update the stats globally
+    refetchQueries: [
+      {
+        query: GET_PRACTICE_PLAYERS,
+        variables: { practiceId }, // Ensure the correct practice stats are refetched
+      },
+    ],
+    awaitRefetchQueries: true, // Ensures refetch completes before continuing
+  }); 
+  
 
   // Function to handle button clicks and trigger the mutation.
   const handleClick = async () => {
@@ -22,6 +32,7 @@ const StatButton: React.FC<StatButtonProps> = ({
         variables: { practiceId, playerId, statName, increment },
       });
 
+      console.log("Mutation Reponse:", data);
       // If a callback function is provided, call it with the updated data.
       if (onStatUpdated) {
         onStatUpdated(data.updatePlayerStat);

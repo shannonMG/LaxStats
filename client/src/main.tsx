@@ -10,7 +10,6 @@ import ErrorPage from './pages/Error.js';
 import CoachDashboard from './components/CoachDashboard.js';
 import PlayerDashboard from './components/PlayerDashboard.js';
 import StatButton from './components/StatButton.js';
-
 const router = createBrowserRouter([
     {
         path: '/',
@@ -50,7 +49,8 @@ const router = createBrowserRouter([
                     increment={1}
                     onStatUpdated={(data) => console.log("Stat Updated:", data)}
                 />
-            }
+            },
+            
         ]
     },
 ]);

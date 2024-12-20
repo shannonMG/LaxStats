@@ -19,10 +19,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({ playerId, playerName, practiceI
    */
   const handleStatUpdated = (updatedStats: any) => {
     setPlayerStats((prevStats) => ({
-      ...prevStats, // Keep previous stats unchanged.
-      ...updatedStats, // Merge the updated stats into the state.
+      ...prevStats,
+      [updatedStats.statName]: updatedStats.newValue, // Use the stat name dynamically
     }));
   };
+  
 
   return (
     <div>
