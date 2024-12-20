@@ -45,5 +45,17 @@ export const UPDATE_PLAYER_STAT = gql `
 }
 `;
 
-
-// need to add an ADD_PRACTICE mutation
+export const ADD_PRACTICE = gql `
+    mutation Mutation {
+        addPractice {
+            coach
+            date
+            id
+            players {
+                completedPasses
+                droppedBalls
+                playerId
+            }
+        }
+}
+`;
