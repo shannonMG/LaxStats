@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client"; // Import the useMutation hook from Apollo Client to execute GraphQL mutations.
 import { StatButtonProps } from "../interfaces/StatButton"; // Import the TypeScript interface defining the props for the StatButton component.
-import { UPDATE_PLAYER_STAT } from "../utils/mutations"; // Import the GraphQL mutation to update a player's stat.
+import { UPDATE_PLAYER_STAT } from "../utils/mutations";
+import { GET_PLAYER_STATS } from "../utils/queries"; // Import the GraphQL mutation to update a player's stat.
 
 // Define the StatButton component as a functional React component with props typed using StatButtonProps (in interfaces)
 const StatButton: React.FC<StatButtonProps> = ({
@@ -16,8 +17,8 @@ const StatButton: React.FC<StatButtonProps> = ({
     // Add refetchQueries to update the stats globally
     refetchQueries: [
       {
-        query: GET_PRACTICE_PLAYERS,
-        variables: { practiceId }, // Ensure the correct practice stats are refetched
+        query: GET_PLAYER_STATS,
+        variables: { practiceId, playerId }, // Ensure the correct practice stats are refetched
       },
     ],
     awaitRefetchQueries: true, // Ensures refetch completes before continuing
