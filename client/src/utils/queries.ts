@@ -13,3 +13,15 @@ export const QUERY_ME = gql`
 `;
 
 // need to add more queries
+
+export const QUERY_PRACTICES=gql`
+query GetPracticesForPlayer($playerId: ID!) {
+  getPracticesForPlayer(playerId: $playerId) {
+    completedPasses
+    droppedBalls
+    practiceId
+  }
+}
+
+
+`
