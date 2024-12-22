@@ -1,1 +1,19 @@
 /* Will deal with styling later... */
+:root{
+    --font-heading: "Kanit", serif;
+    --text-sm:0.5rem;
+    --text-medium:1rem;
+}
+body{
+    font-family: var(--font-heading);
+
+}
+
+.playerPractice {
+        font-size: var(--text-sm);
+        list-style-type: none;
+        border: 1px solid #c6c4c4;
+        border-radius: 0.5rem;
+        padding: 2rem;
+    
+}

@@ -25,7 +25,7 @@ const PlayerDashboard = () => {
                     {
                         Practices.map((practice:any) => {
                             return (
-                                <li>
+                                <li className="playerPractice">
                                     <div>{practice.practiceId}</div>
                                     <div>
                                         {/* this is the part that we need to hide eventually */}
