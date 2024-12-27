@@ -25,7 +25,7 @@ type PlayerPracticeData {
   practiceId: ID!
   droppedBalls: Int
   completedPasses: Int
-  
+  # include the date as well (to better reference)
 }
 
 # Main Practice type

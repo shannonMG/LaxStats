@@ -1,10 +1,10 @@
 import { type JwtPayload, jwtDecode } from 'jwt-decode';
-
+//sk edited _id to match me Query
 interface ExtendedJwt extends JwtPayload {
     data:{
         username:string,
         role:string,
-        id:string
+        _id:string
     }
 };
 
@@ -41,6 +41,18 @@ class AuthService {
         if (token) {
             const decoded = jwtDecode<ExtendedJwt>(token);
             return decoded?.data?.role || null;
+        }
+        return null;
+    }
+
+    //SK added this block to allow user player user to see practices specific to them, it's returning id for player
+
+    getId(): string | null {
+        // Decodes the token and returns the user's role
+        const token = this.getToken();
+        if (token) {
+            const decoded = jwtDecode<ExtendedJwt>(token);
+            return decoded?.data?._id || null;
         }
         return null;
     }
