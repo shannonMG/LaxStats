@@ -9,13 +9,27 @@ const CoachDashboard = () => {
     const [addPractice] = useMutation(ADD_PRACTICE);
     const [isEnabled1, setIsEnabled1] = useState(false);
     const [isEnabled2, setIsEnabled2] = useState(false);
-    const handleClick = async (event: any) => {
+    const handleClick1 = async (event: any) => {
         event.preventDefault();
-        setIsEnabled1(true);
-        try {
-            await addPractice();
-        } catch (err) {
-            console.error(err);
+        const startPractice:any = document.getElementById("startPractice");
+        if(!isEnabled1) {setIsEnabled1(true)
+            startPractice.textContent = "Close new practice";
+            try {
+                await addPractice();
+            } catch (err) {
+                console.error(err);
+        }} else {setIsEnabled1(false)
+            startPractice.textContent = "Start a new practice";
+        }
+    };
+    const handleClick2 = async (event: any) => {
+        event.preventDefault();
+        const previousPractices:any = document.getElementById("previousPractices");
+        if (!isEnabled2) {setIsEnabled2(true)
+            previousPractices.textContent = "Close previous practices";
+        } else {
+            setIsEnabled2(false)
+            previousPractices.textContent = "See previous practices";
         }
     };
 
@@ -24,13 +38,13 @@ const CoachDashboard = () => {
             <h1>Coach Dashboard</h1>
             <p>Welcome, Coach!</p>
             <p>This is your dashboard where you can:</p>
-            <button onClick={(handleClick)}>Start a new practice</button>
+            <button id="startPractice" onClick={(handleClick1)}>Start a new practice</button>
             {isEnabled1 && (
                 <div>
                     <PracticeDashboard />
                 </div>
             )}
-            <button onClick={() => setIsEnabled2(true)}>See previous practices</button>
+            <button id="previousPractices" onClick={(handleClick2)}>See previous practices</button>
             {isEnabled2 && (
                 <div>
                     <PreviousPractices />
@@ -41,4 +55,3 @@ const CoachDashboard = () => {
 };
 
 export default CoachDashboard;
-
