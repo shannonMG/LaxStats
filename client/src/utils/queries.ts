@@ -8,9 +8,20 @@ export const QUERY_ME = gql`
             password
             role
             username
-        }
+        },
+
     }
 `;
+
+export const GET_PLAYER_STATS = gql`
+    query Query($practiceId: ID!, $playerId: ID!) {
+        getPlayerStatsById(practiceId: $practiceId, playerId: $playerId) {
+            completedPasses
+            droppedBalls
+            playerId
+  }
+}
+`
 
 // need to add more queries
 

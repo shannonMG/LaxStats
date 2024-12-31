@@ -1,8 +1,8 @@
 const userTypeDefs = `#graphql
   type User {
-    _id: ID
+    _id: ID!
     role: String
-    name: String
+    name: String!
     username: String
     password: String
   }
@@ -23,6 +23,15 @@ input UserInput {
   type Auth {
     token: ID!
     user: User
+  }
+  
+  type PlayerStats {
+    completedPasses: Int
+    droppedBalls: Int
+  }
+
+  type Query {
+    players: [User!]!
   }
 
 

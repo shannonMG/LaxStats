@@ -15,10 +15,11 @@ input PracticeInput {
 
 # Type for individual player stats at a practice
 type PlayerStats {
-  playerId: ID!
-  droppedBalls: Int!
-  completedPasses: Int!
+  player: User       # Notice we use 'player' instead of 'playerId'
+  droppedBalls: Int
+  completedPasses: Int
 }
+
 
 
 type PlayerPracticeData {
@@ -36,6 +37,11 @@ type Practice {
   players: [PlayerStats!]! # Array of players with stats
 }
 
+type Player {
+  _id: ID!
+  name: String!
+  stats: PlayerStats!
+}
 
 
 # Mutation type for creating a new practice

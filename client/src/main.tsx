@@ -7,7 +7,6 @@ import Login from './pages/Login.js';
 import Dashboard from './pages/Dashboard.js';
 import ErrorPage from './pages/Error.js';
 import StatButton from './components/StatButton.js';
-
 const router = createBrowserRouter([
     {
         path: '/',
@@ -33,13 +32,14 @@ const router = createBrowserRouter([
             {
                 path: '/stat-button',
                 element: <StatButton 
-                    practiceId="67633f3c0601b58728666542"
-                    playerId="675e29cd81f3c738784728d7"
+                    practiceId="675c1b6d675639cd504cffe9"
+                    playerId="675ae85d361a7d58527cec9b"
                     statName="completedPasses"
                     increment={1}
                     onStatUpdated={(data) => console.log("Stat Updated:", data)}
                 />
-            }
+            },
+            
         ]
     },
 ]);
