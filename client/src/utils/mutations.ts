@@ -52,10 +52,13 @@ export const ADD_PRACTICE = gql `
             date
             id
             players {
-                completedPasses
-                droppedBalls
-                playerId
-            }
+                player {
+                    _id
+                    name
+             }
+             droppedBalls
+            completedPasses
+           }
         }
 }
 `;
