@@ -3,12 +3,15 @@ import { useMutation } from '@apollo/client';
 
 import { ADD_PRACTICE } from '../utils/mutations';
 import PreviousPractices from './PreviousPractices';
+import PracticeDashboard from './PracticeDashboard';
 
 const CoachDashboard = () => {
     const [addPractice] = useMutation(ADD_PRACTICE);
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled1, setIsEnabled1] = useState(false);
+    const [isEnabled2, setIsEnabled2] = useState(false);
     const handleClick = async (event: any) => {
         event.preventDefault();
+        setIsEnabled1(true);
         try {
             await addPractice();
         } catch (err) {
@@ -22,8 +25,13 @@ const CoachDashboard = () => {
             <p>Welcome, Coach!</p>
             <p>This is your dashboard where you can:</p>
             <button onClick={(handleClick)}>Start a new practice</button>
-            <button onClick={() => setIsEnabled(true)}>See previous practices</button>
-            {isEnabled && (
+            {isEnabled1 && (
+                <div>
+                    <PracticeDashboard />
+                </div>
+            )}
+            <button onClick={() => setIsEnabled2(true)}>See previous practices</button>
+            {isEnabled2 && (
                 <div>
                     <PreviousPractices />
                 </div>
