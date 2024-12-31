@@ -9,6 +9,7 @@ const CoachDashboard = () => {
     const [addPractice] = useMutation(ADD_PRACTICE);
     const [isEnabled1, setIsEnabled1] = useState(false);
     const [isEnabled2, setIsEnabled2] = useState(false);
+
     const handleClick1 = async (event: any) => {
         event.preventDefault();
         const startPractice:any = document.getElementById("startPractice");
@@ -22,6 +23,7 @@ const CoachDashboard = () => {
             startPractice.textContent = "Start a new practice";
         }
     };
+    
     const handleClick2 = async (event: any) => {
         event.preventDefault();
         const previousPractices:any = document.getElementById("previousPractices");
