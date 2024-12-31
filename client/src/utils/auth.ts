@@ -65,9 +65,9 @@ class AuthService {
         const role = this.getRole();
 
         if (role === 'coach') {
-            window.location.assign('/coach-dashboard');
+            window.location.assign('/me');
         } else if (role === 'player') {
-            window.location.assign('/player-dashboard');
+            window.location.assign('/me');
         } else {
             window.location.assign('/'); // Default case
         }

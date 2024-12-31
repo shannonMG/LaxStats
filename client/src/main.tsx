@@ -2,13 +2,10 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import App from './App.jsx';
-import Home from './pages/Home.js';
 import Signup from './pages/Signup.js';
 import Login from './pages/Login.js';
 import Dashboard from './pages/Dashboard.js';
 import ErrorPage from './pages/Error.js';
-import CoachDashboard from './components/CoachDashboard.js';
-import PlayerDashboard from './components/PlayerDashboard.js';
 import StatButton from './components/StatButton.js';
 
 const router = createBrowserRouter([
@@ -19,7 +16,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />
+                element: <Dashboard />
             }, {
                 path: '/login',
                 element: <Login />
@@ -32,14 +29,6 @@ const router = createBrowserRouter([
             }, {
                 path: '/me',
                 element: <Dashboard />
-            },
-            {
-                path: '/coach-dashboard',
-                element: <CoachDashboard />
-            },
-            {
-                path: '/player-dashboard',
-                element: <PlayerDashboard />
             },
             {
                 path: '/stat-button',
