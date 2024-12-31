@@ -41,6 +41,12 @@ interface UpdatePlayerStatArgs {
   increment: number;     // The increment is an integer to add or subtract
 }
 
+interface PlayerStatsParent {
+  playerId: string | { _id: string; name: string };
+  droppedBalls?: number;
+  completedPasses?: number;
+}
+
 
 
 
@@ -110,7 +116,17 @@ const practiceResolvers = {
   },
 
 
+    PlayerStats: {
+      // Mark the param type:
+      player: async (
+        parent: PlayerStatsParent,
+      ) => {
+        // Now TypeScript won't complain about `parent` being implicitly any
+        return parent.playerId;
+      },
+    },
   
+
   Mutation: {
     addPractice: async (_: any, __: AddPracticeArgs, context: Context): Promise<IPractice> => {
       try {
@@ -152,6 +168,7 @@ const practiceResolvers = {
 
         // Save the new practice to the database and cast it as the IPractice type
         const savedPractice = await newPractice.save() as IPractice;
+        await savedPractice.populate('players.playerId', 'name');
 
         // Log the saved practice for debugging purposes
         console.log('Saved Practice:', savedPractice);
