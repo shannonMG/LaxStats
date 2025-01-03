@@ -31,16 +31,14 @@ export const LOGIN_USER = gql `
 `;
 
 export const UPDATE_PLAYER_STAT = gql ` 
-  mutation Mutation($practiceId: ID!, $playerId: ID!, $statName: String!, $increment: Int!) {
+mutation UpdatePlayerStat($practiceId: ID!, $playerId: ID!, $statName: String!, $increment: Int!) {
   updatePlayerStat(practiceId: $practiceId, playerId: $playerId, statName: $statName, increment: $increment) {
-    id
-    date
-    coach
-    players {
-      playerId
-      droppedBalls
-      completedPasses
+    player {
+      _id
+      name
     }
+    droppedBalls
+    completedPasses
   }
 }
 `;

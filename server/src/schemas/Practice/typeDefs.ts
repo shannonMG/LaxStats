@@ -15,7 +15,8 @@ input PracticeInput {
 
 # Type for individual player stats at a practice
 type PlayerStats {
-  player: User       # Notice we use 'player' instead of 'playerId'
+  practiceID: ID!
+  playerId: User       # Notice we use 'player' instead of 'playerId'
   droppedBalls: Int
   completedPasses: Int
 }

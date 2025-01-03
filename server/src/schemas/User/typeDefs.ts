@@ -26,6 +26,7 @@ input UserInput {
   }
   
   type PlayerStats {
+    player: User
     completedPasses: Int
     droppedBalls: Int
   }

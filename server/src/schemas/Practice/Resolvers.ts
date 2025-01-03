@@ -1,8 +1,7 @@
 import Practice from '../../models/Practice.js'; // Import the Practice model
 import User from '../../models/User.js'; // Import the User model
 import { AuthenticationError } from 'apollo-server-errors'; // Import Apollo error for authentication issues
-import { Document, Types } from 'mongoose'; // Import Mongoose types for type-checking
-
+import { Document, Types } from 'mongoose'; 
 // Define the structure of PlayerStats: stats that belong to each player in practice
 interface PlayerStats {
   playerId: Types.ObjectId;         // The ID of the player
@@ -29,17 +28,13 @@ interface Context {
 // Define the arguments for the addPractice mutation (empty in this case)
 interface AddPracticeArgs { }
 
-interface PlayerStatsArgs {
+interface UpdatePlayerStatArgs {
   practiceId: string; // The ID of the practice document
-  playerId: string;   // The ID of the player to find stats for
+  playerId: string;   // The ID of the player to update
+  statName: "droppedBalls" | "completedPasses"; // Restrict to known stats
+  increment: number;  // The increment value
 }
 
-interface UpdatePlayerStatArgs {
-  practiceId: string;    // The practice ID will typically be a string; GraphQL IDs map to strings in TS
-  playerId: string;      // The player ID will also typically be a string
-  statName: 'droppedBalls' | 'completedPasses'; // Restrict to known stat names if desired
-  increment: number;     // The increment is an integer to add or subtract
-}
 
 interface PlayerStatsParent {
   playerId: string | { _id: string; name: string };
@@ -47,6 +42,10 @@ interface PlayerStatsParent {
   completedPasses?: number;
 }
 
+interface GetPlayerStatsByIdArgs {
+  practiceId: string; // Practice ID from query arguments
+  playerId: string;   // Player ID from query arguments
+}
 
 
 
@@ -54,65 +53,37 @@ interface PlayerStatsParent {
 const practiceResolvers = {
   Query: {
     //this gets the stats for a given player at a give practice. 
-    getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
+    getPlayerStatsById: async (
+      _parent: unknown,
+      { practiceId, playerId }: GetPlayerStatsByIdArgs
+    ) => {
       try {
         // 1. Find the practice document by its ID
         const practice = await Practice.findById(practiceId);
         if (!practice) {
-          throw new Error('Practice document not found.');
+          throw new Error("Practice document not found.");
         }
-
+    
         // 2. Find the player stats within the players array
         const playerStats = practice.players.find(
           (player) => player.playerId.toString() === playerId
         );
-
+    
         if (!playerStats) {
-          throw new Error('Player stats not found in this practice.');
+          throw new Error("Player stats not found in this practice.");
         }
-
+    
         // 3. Return the player's stats
         return {
-          playerId: playerStats.playerId,
+          player: playerStats.playerId, // Resolve the `playerId` to the full `User` object if necessary
           droppedBalls: playerStats.droppedBalls,
           completedPasses: playerStats.completedPasses,
         };
       } catch (error) {
-        console.error('Error fetching player stats:', error);
-        throw new Error('Failed to fetch player stats.');
+        console.error("Error fetching player stats:", error);
+        throw new Error("Failed to fetch player stats.");
       }
-    },
-    getPracticesForPlayer: async (_parent: any, { playerId }: { playerId: string }) => {
-      try {
-        // Find all practices that this player is part of
-        const playerPractices = await Practice.find({ 'players.playerId': playerId });
-    
-        // If no practices are found, you can decide what to return:
-        if (!playerPractices || playerPractices.length === 0) {
-          return []; // return an empty array, or you could throw an error
-        }
-    
-        // Return an array of practices, possibly including the player's specific stats
-        return playerPractices.map((practice) => {
-          const playerStats = practice.players.find((player) => player.playerId.toString() === playerId);
-
-        if (!playerStats) {
-          throw new Error('Player stats not found.');
-        }
-
-        // Now `playerStats` is guaranteed to be defined.
-        return {
-          practiceId: practice._id,
-          droppedBalls: playerStats.droppedBalls,
-          completedPasses: playerStats.completedPasses,
-        };
-        });
-      } catch (error) {
-        console.error('Error fetching practices for player:', error);
-        throw new Error('Failed to fetch practices for player.');
-      }
-    },
-    
+    }
   },
 
 
@@ -208,26 +179,49 @@ const practiceResolvers = {
 
         },
 //This shouuld update any player stat, insetad of creating new mutaions each time we create add a statistic to track
-    updatePlayerStat: async (_parent: unknown,{ practiceId, playerId, statName, increment }: UpdatePlayerStatArgs ) => {
-          if (!['droppedBalls', 'completedPasses'].includes(statName)) {
-            throw new Error('Invalid stat name');
-          }
+updatePlayerStat: async (
+  _parent: unknown, // Explicitly type `_parent` as `unknown`
+  { practiceId, playerId, statName, increment }: UpdatePlayerStatArgs
+) => {
+  console.log("Received Arguments:", { practiceId, playerId, statName, increment });
 
-          const updateField = `players.$.${statName}`;
+  // Validate the statName
+  if (!["droppedBalls", "completedPasses"].includes(statName)) {
+    throw new Error("Invalid stat name");
+  }
 
-          const updatedPractice = await Practice.findOneAndUpdate(
-            { _id: practiceId, 'players.playerId': playerId },
-            { $inc: { [updateField]: increment } },
-            { new: true }
-          );
+  const updatedPractice = await Practice.findOneAndUpdate(
+    {
+      _id: practiceId,
+      "players.playerId": playerId,
+    },
+    {
+      $inc: { [`players.$.${statName}`]: increment },
+    },
+    { new: true }
+  );
 
-          if (!updatedPractice) {
-            throw new Error('Player or practice not found');
-          }
+  if (!updatedPractice) {
+    console.error("No matching practice or player found:", { practiceId, playerId });
+    throw new Error("Practice or player not found");
+  }
 
-          return updatedPractice;
-        },
-      },
+  const updatedPlayer = updatedPractice.players.find(
+    (p) => p.playerId.toString() === playerId
+  );
+
+  if (!updatedPlayer) {
+    console.error("Player stats not found in practice:", playerId);
+    throw new Error("Player stats not found in practice");
+  }
+
+  return {
+    player: updatedPlayer.playerId,
+    droppedBalls: updatedPlayer.droppedBalls,
+    completedPasses: updatedPlayer.completedPasses,
+  };
+}
+
 
 //SK added this for updated Completed Passes
         // updateCompletedPasses: async(_: any, { playerId, completedPasses}: PlayerStats): Promise<IPractice>=> {
@@ -277,7 +271,7 @@ const practiceResolvers = {
      Practice.findAndUpdate({$set: { players: updatedPlayers} })
 
     */
-  }
-;
+  },
+}
 
 export default practiceResolvers; // Export the resolvers

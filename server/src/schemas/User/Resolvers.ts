@@ -1,6 +1,7 @@
 import User from '../../models/User.js';
 import { signToken, AuthenticationError } from '../../utils/auth.js';
 
+
 interface User {
   _id: string;
   role: string;

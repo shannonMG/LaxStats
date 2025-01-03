@@ -28,21 +28,24 @@ const StatButton: React.FC<StatButtonProps> = ({
   // Function to handle button clicks and trigger the mutation.
   const handleClick = async () => {
     try {
-      // Execute the mutation with the required variables.
+      console.log("Sending Variables:", { practiceId, playerId, statName, increment });
       const { data } = await updatePlayerStat({
         variables: { practiceId, playerId, statName, increment },
       });
-
-      console.log("Mutation Reponse:", data);
-      // If a callback function is provided, call it with the updated data.
+      console.log("Mutation Response:", data);
       if (onStatUpdated) {
         onStatUpdated(data.updatePlayerStat);
       }
-    } catch (err) {
-      // Log any errors that occur during the mutation.
-      console.error("Failed to update stat:", (err as Error).message);
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "message" in err) {
+        console.error("Failed to update stat:", (err as Error).message);
+      } else {
+        console.error("An unknown error occurred:", err);
+      }
     }
+    
   };
+  
 
   return (
     // Render a button that triggers handleClick when clicked.
