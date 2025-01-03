@@ -19,7 +19,7 @@ const PreviousPractices = () => {
         <div>
             <h3>Previous Practices</h3>
             <ul>
-                {Practices?.map(() => {
+                {Practices?.map((practice:any) => {
                     return (
                         <li>
                             <div key={Practices.id}>
