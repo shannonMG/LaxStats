@@ -1,4 +1,9 @@
 /* Will deal with styling later... */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root{
     --font-heading: "Kanit", serif;
     --text-sm:0.5rem;
