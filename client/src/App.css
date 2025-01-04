@@ -6,7 +6,20 @@
 }
 body{
     font-family: var(--font-heading);
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0; /* Remove default margin */
 
+}
+
+main {
+    width: 100%; /* Full width */
+    max-width: 400px; /* Set a max width for the form */
+    padding: 2rem; /* Add some padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+    border-radius: 0.5rem; /* Optional: Rounded corners */
 }
 
 .playerPractice {
