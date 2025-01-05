@@ -25,11 +25,7 @@ input UserInput {
     user: User
   }
   
-  type PlayerStats {
-    player: User
-    completedPasses: Int
-    droppedBalls: Int
-  }
+
 
   type Query {
     players: [User!]!

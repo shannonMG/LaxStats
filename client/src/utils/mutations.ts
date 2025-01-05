@@ -44,19 +44,20 @@ mutation UpdatePlayerStat($practiceId: ID!, $playerId: ID!, $statName: String!, 
 `;
 
 export const ADD_PRACTICE = gql `
-    mutation Mutation {
-        addPractice {
-            coach
-            date
-            id
-            players {
-                player {
-                    _id
-                    name
-             }
-             droppedBalls
-            completedPasses
-           }
-        }
+mutation {
+  addPractice {
+    id
+    date
+    coach
+    players {
+      player {
+        id
+        name
+      }
+      droppedBalls
+      completedPasses
+    }
+  }
 }
+
 `;
