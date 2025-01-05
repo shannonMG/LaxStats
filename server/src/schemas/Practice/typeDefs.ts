@@ -19,7 +19,7 @@ type Player {
   name: String!
 }
 
-# Type for individual player stats at a practice
+
 type PlayerStats {
   player: Player! # Reference to the player
   droppedBalls: Int
@@ -27,7 +27,7 @@ type PlayerStats {
 }
 
 
-# Main Practice type
+
 type Practice {
   id: ID!
   date: String!
@@ -35,7 +35,6 @@ type Practice {
   players: [PlayerStats!]! # Array of players with stats
 }
 
-# Data for a player's stats across practices
 type PlayerPracticeData {
   practiceId: ID!
   date: String!
@@ -47,25 +46,20 @@ enum StatName {
   completedPasses
 }
 
-# Mutation type
-type Mutation {
-  addPractice: Practice!
-  updateDroppedBalls(playerId: ID!, droppedBalls: Int!): Practice
-  updateCompletedPasses(playerId: ID!, completedPasses: Int!): Practice
-  updatePlayerStat(
-    practiceId: ID!,
-    playerId: ID!,
-    statName: StatName!,
-    increment: Int!
-  ): Practice!
+type Query {
+    practices: [Practice!]!
+    getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats!
 }
 
-# Query type
-type Query {
-  practices: [Practice!]!
-  practice(id: ID!): Practice
-  getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats!
-  getPracticesForPlayer: [Practice!]!
+type Mutation {
+  addPractice: Practice!
+  a
+    updatePlayerStat(
+        practiceId: ID!
+        playerId: ID!
+        statName: String!
+        increment: Int!
+    ): PlayerStats!
 }
 
   
