@@ -14,6 +14,16 @@ interface Practice {
 }
 
 interface PracticeDashboardProps {
-  practiceData: Practice[]; // Expecting an array of practices
-  userId: string; // User ID for filtering players
+  practiceData: {
+    id: string;
+    players: {
+      player: {
+        _id: string;
+        name: string;
+      };
+      droppedBalls: number;
+      completedPasses: number;
+    }[];
+  };
+  userId?: string; // Make `userId` optional
 }
