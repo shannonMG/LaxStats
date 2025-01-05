@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 
 import { ADD_PRACTICE } from '../utils/mutations';
 import PreviousPractices from './PreviousPractices';
-import PracticeDashboard from './PracticeDashboard';
+
 
 const CoachDashboard = () => {
   const [addPractice] = useMutation(ADD_PRACTICE);
@@ -64,7 +64,7 @@ const CoachDashboard = () => {
       <p>This is your dashboard where you can:</p>
       <button id="startPractice" onClick={handleClick1}>Start a new practice</button>
       {isEnabled1 && practiceData && (
-        <PracticeDashboard practiceData={practiceData} />
+        <PreviousPractices  />
       )}
       <button id="previousPractices" onClick={handleClick2}>See previous practices</button>
       {isEnabled2 && (

@@ -42,6 +42,10 @@ type PlayerPracticeData {
   droppedBalls: Int
   completedPasses: Int
 }
+enum StatName {
+  droppedBalls
+  completedPasses
+}
 
 # Mutation type
 type Mutation {
@@ -51,7 +55,7 @@ type Mutation {
   updatePlayerStat(
     practiceId: ID!,
     playerId: ID!,
-    statName: String!,
+    statName: StatName!,
     increment: Int!
   ): Practice!
 }
@@ -61,7 +65,7 @@ type Query {
   practices: [Practice!]!
   practice(id: ID!): Practice
   getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats!
-  getPracticesForPlayer(playerId: ID!): [PlayerPracticeData!]!
+  getPracticesForPlayer: [Practice!]!
 }
 
   

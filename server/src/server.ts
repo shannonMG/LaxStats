@@ -16,6 +16,8 @@ const server = new ApolloServer({
   resolvers, // Now properly typed
 });
 
+
+
 const startApolloServer = async () => {
   try {
     await server.start();
