@@ -10,7 +10,7 @@ const PreviousPractices = () => {
         }
     })
 
-    const Practices=data?.QueryForCoaches || []
+    const Practices=data?.Practices || []
     if (loading){
         return <h2>Loading, please wait...</h2>
     }
@@ -19,20 +19,20 @@ const PreviousPractices = () => {
         <div>
             <h3>Previous Practices</h3>
             <ul>
-                {Practices?.map((practice:any) => {
+                {Practices.map((practice:any) => {
                     return (
                         <li>
-                            <div key={Practices.id}>
+                            <div key={practice.id}>
                                 <h4>
-                                    {Practices.coach.name} held this practice on {new Date(Number(Practices.date)).toLocaleDateString()}.
+                                    {practice.coach} held this practice on {new Date(Number(practice.date)).toLocaleDateString()}.
                                 </h4>
                                 <p>Players:</p>
                                 <ul>
-                                    {Practices.players.map(() => {
+                                    {practice.players.map(() => {
                                         return (
                                             <li>
-                                                <div key={Practices.players._playerId}>
-                                                    <p>{Practices.player.name}</p>
+                                                <div key={practice.players.player._id}>
+                                                    <p>{practice.players.player._id}</p>
                                                 </div>
                                             </li>
                                         )
