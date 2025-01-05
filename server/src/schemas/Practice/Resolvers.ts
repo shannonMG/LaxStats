@@ -53,6 +53,9 @@ interface PlayerStatsParent {
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
   Query: {
+    practices: async () => {
+      return Practice.find();
+    },
     //this gets the stats for a given player at a give practice. 
     getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
       try {

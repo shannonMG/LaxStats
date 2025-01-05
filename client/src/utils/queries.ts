@@ -33,6 +33,19 @@ query GetPracticesForPlayer($playerId: ID!) {
     practiceId
   }
 }
+`
 
-
+export const QUERY_PRACTICES_FOR_COACH=gql`
+query Practices {
+  practices {
+    coach
+    date
+    id
+    players {
+      player {
+        _id
+      }
+    }
+  }
+}
 `

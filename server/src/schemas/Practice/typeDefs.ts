@@ -61,7 +61,7 @@ type Mutation {
 # Query type for fetching practices
 # Query type for fetching practices
 type Query {
-  practices: [Practice!]!
+  practices: [Practice]
   practice(id: ID!): Practice
   getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats!
   # Given a playerId, return all practices that the player is part of,
