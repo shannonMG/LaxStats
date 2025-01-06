@@ -44,18 +44,24 @@ interface GetPlayerStatsByIdArgs {
 }
 
 
-// interface IPlayerStats {
-//     playerId: {
-//         _id: string;
-//         name: string;
-//     };
-//     stats: {
-//         droppedBalls: number;
-//         completedPasses: number;
-//     };
-// }
-
+interface PlayerStatsParent {
+  playerId: Types.ObjectId | { _id: Types.ObjectId; name: string };
+  droppedBalls: number;
+  completedPasses: number;
+}
 const practiceResolvers = {
+  
+  PlayerStats: {
+    player: async (parent: PlayerStatsParent) => {
+        if (typeof parent.playerId === 'object' && '_id' in parent.playerId) {
+            return parent.playerId; // Already populated
+        }
+        return await User.findById(parent.playerId).select('name');
+    },
+},
+
+
+
   Query: {
       // Fetch all practices
       practices: async () => {
@@ -120,52 +126,63 @@ const practiceResolvers = {
 
   Mutation: {
       // Add a new practice
-      addPractice: async (
-          _: any,
-          __: AddPracticeArgs,
-          context: Context
-      ): Promise<IPractice> => {
-          if (!context.user || context.user.role !== 'coach') {
-              throw new AuthenticationError(
-                  'You must be logged in as a coach to create a practice.'
-              );
-          }
-
-          const coachId = new Types.ObjectId(context.user.id);
-          const currentDate = new Date();
-
-          try {
-              const allPlayers: { _id: Types.ObjectId }[] = await User.find({
-                  role: 'player',
-              });
-
-              if (!allPlayers.length) {
-                  throw new Error('No players found in the database.');
-              }
-
-              const playersStats: PlayerStats[] = allPlayers.map(
-                  (player) => ({
-                      playerId: player._id,
-                      droppedBalls: 0,
-                      completedPasses: 0,
-                  })
-              );
-
-              const newPractice = new Practice({
-                  date: currentDate,
-                  coach: coachId,
-                  players: playersStats,
-              });
-
-              const savedPractice = await newPractice.save();
-              await savedPractice.populate('players.playerId', 'name');
-
-              return savedPractice;
-          } catch (error) {
-              console.error('Error creating practice:', error);
-              throw new Error('Failed to create practice.');
-          }
-      },
+      addPractice: async (_: any, __: AddPracticeArgs, context: Context): Promise<IPractice> => {
+        if (!context.user || context.user.role !== 'coach') {
+            throw new AuthenticationError('You must be logged in as a coach to create a practice.');
+        }
+    
+        const coachId = new Types.ObjectId(context.user.id);
+        const currentDate = new Date();
+    
+        try {
+            // Fetch all players with the role of 'player'
+            const allPlayers = await User.find({ role: 'player' }).select('_id name');
+    
+            if (!allPlayers.length) {
+                throw new Error('No players found in the database.');
+            }
+    
+            // Create initial stats for all players
+            const playersStats: PlayerStats[] = allPlayers.map(player => ({
+                playerId: player._id, // Reference player ObjectId
+                droppedBalls: 0,
+                completedPasses: 0,
+            }));
+    
+            // Create a new practice document
+            const newPractice = new Practice({
+                date: currentDate,
+                coach: coachId,
+                players: playersStats,
+            });
+    
+            // Save the practice to the database
+            const savedPractice = await newPractice.save();
+    
+            // Populate player names in the saved practice
+            await savedPractice.populate('players.playerId', 'name');
+    
+            // Map the response to include both playerId and name
+            return {
+                id: savedPractice._id.toString(),
+                date: savedPractice.date.toISOString(),
+                players: savedPractice.players.map(player => ({
+                    player: {
+                        id: player.playerId._id.toString(), // Convert ObjectId to string
+                        name: player.playerId.name, // Player name from the User model
+                    },
+                    droppedBalls: player.droppedBalls,
+                    completedPasses: player.completedPasses,
+                })),
+            };
+        } catch (error) {
+            console.error('Error creating practice:', error);
+            throw new Error('Failed to create practice.');
+        }
+    },
+    
+    
+    
 
       // Update a player's stat
       updatePlayerStat: async (
