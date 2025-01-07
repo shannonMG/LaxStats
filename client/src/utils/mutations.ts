@@ -34,7 +34,7 @@ export const UPDATE_PLAYER_STAT = gql `
 mutation UpdatePlayerStat($practiceId: ID!, $playerId: ID!, $statName: String!, $increment: Int!) {
   updatePlayerStat(practiceId: $practiceId, playerId: $playerId, statName: $statName, increment: $increment) {
     player {
-      id
+      _id
       name
     }
     droppedBalls
@@ -51,7 +51,7 @@ mutation {
     coach
     players {
       player {
-        id
+        _id
         name
       }
       droppedBalls
