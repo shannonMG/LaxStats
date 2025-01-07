@@ -21,7 +21,7 @@ type Player {
 
 
 type PlayerStats {
-  player: Player! # Reference to the player
+  player: Player # Reference to the player
   droppedBalls: Int
   completedPasses: Int
 }

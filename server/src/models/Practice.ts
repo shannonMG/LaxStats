@@ -2,13 +2,14 @@ import { Schema, model, Document, Types } from 'mongoose';
 
 // Define the interface for Player stats
 interface IPlayerStats {
-  playerId: Types.ObjectId;
+  player: Types.ObjectId;
   droppedBalls: number;
   completedPasses: number;
 }
 
 // Define an interface for the Practice document
 interface IPractice extends Document {
+  _id: string;
   date: Date;
   coach: Types.ObjectId;
   players: IPlayerStats[];
@@ -16,7 +17,7 @@ interface IPractice extends Document {
 
 // Define the schema for the Practice document
 const playerStatsSchema = new Schema({
-  playerId: { type: Schema.Types.ObjectId, ref: 'User' }, 
+  player: { type: Schema.Types.ObjectId, ref: 'User' }, 
   droppedBalls: Number,
   completedPasses: Number,
 });
