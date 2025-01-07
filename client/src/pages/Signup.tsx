@@ -65,8 +65,8 @@ const Signup = () => {
                                 className="rounded-3xl border-none bg-yellow-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
                                 type="text"
                                 placeholder="Name"
-                                name="Name"
-                                value={formState.username}
+                                name="name"
+                                value={formState.name}
                                 onChange={handleChange} />
                         </div>
 
