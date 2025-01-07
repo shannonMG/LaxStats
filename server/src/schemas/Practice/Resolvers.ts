@@ -65,6 +65,7 @@ const practiceResolvers = {
 
   Query: {
     // Fetch all practices
+<<<<<<< HEAD
     practices: async (): Promise<IPractice[]> => {
       try {
         // Fetch practices and populate `playerId`
@@ -80,6 +81,16 @@ const practiceResolvers = {
                   name: (player.playerId as IPlayer).name || null,
                 }
               : (player.playerId as Types.ObjectId),
+=======
+    practices: async () => {
+      try {
+        const result = await Practice.find().populate('players.playerId', 'name');
+        return result.map((practice: any) => ({
+          id: practice._id.toString(),
+          date: practice.date.toISOString(),
+          players: practice.players.map((player: any) => ({
+            playerId: player.playerId, // Fixed to directly assign playerId
+>>>>>>> 66d20ef0d6156ba45b7acf71cfe58b481eea870a
             droppedBalls: player.droppedBalls || 0,
             completedPasses: player.completedPasses || 0,
           })),
@@ -88,6 +99,7 @@ const practiceResolvers = {
         console.error('Error fetching practices:', error);
         throw new Error('Failed to fetch practices.');
       }
+<<<<<<< HEAD
     };
     
     // Fetch player stats by practice and player ID
@@ -114,6 +126,34 @@ const practiceResolvers = {
 
         return {
           player: playerStats.player,
+=======
+    },
+
+    // Fetch player stats by practice and player ID
+    getPlayerStatsById: async (
+      _parent: unknown,
+      { practiceId, playerId }: GetPlayerStatsByIdArgs
+    ) => {
+      try {
+        const practice = await Practice.findById(practiceId).populate(
+          'players.playerId',
+          'name'
+        );
+        if (!practice) {
+          throw new Error('Practice document not found.');
+        }
+
+        const playerStats = practice.players.find(
+          (player) => player.playerId.toString() === playerId
+        );
+
+        if (!playerStats) {
+          throw new Error('Player stats not found in this practice.');
+        }
+
+        return {
+          player: playerStats.playerId,
+>>>>>>> 66d20ef0d6156ba45b7acf71cfe58b481eea870a
           droppedBalls: playerStats.droppedBalls || 0,
           completedPasses: playerStats.completedPasses || 0,
         };
