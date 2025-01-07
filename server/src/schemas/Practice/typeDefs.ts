@@ -1,4 +1,4 @@
-const practiceTypeDefs = `#graphql
+const practiceTypeDefs = ` #graphql
 # Input type for individual player stats at a practice
 input PlayerStatsInput {
   playerId: ID!
@@ -53,19 +53,12 @@ type Query {
 
 type Mutation {
   addPractice: Practice!
-  a
-    updatePlayerStat(
+  updatePlayerStat(
         practiceId: ID!
         playerId: ID!
-        statName: String!
+        statName: StatName!
         increment: Int!
     ): PlayerStats!
 }
-
-  
-
-  
-
 `
-
 export default practiceTypeDefs;
