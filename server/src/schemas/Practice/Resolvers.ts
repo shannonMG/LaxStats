@@ -10,10 +10,10 @@ export interface IPlayer {
 }
 
 
-interface PlayerStats {
-  playerId: Types.ObjectId | IPlayer
-  droppedBalls: number;
+interface IPlayerStats {
+  player: Types.ObjectId | IPlayer
   completedPasses: number;
+  droppedBalls: number
 }
 
 
@@ -21,7 +21,7 @@ interface PlayerStats {
 export interface IPractice extends Document {
   _id: string;
   date: Date;
-  players: PlayerStats[];
+  players: IPlayerStats[];
 }
 
 interface Context {
@@ -65,32 +65,22 @@ const practiceResolvers = {
 
   Query: {
     // Fetch all practices
-<<<<<<< HEAD
     practices: async (): Promise<IPractice[]> => {
       try {
-        // Fetch practices and populate `playerId`
-        const result = await Practice.find().populate('players.playerId', 'name');
+        const result = await Practice.find()
+          .populate('players.player', 'name') // Populate player's name
+          .lean<IPractice[]>(); // Convert Mongoose documents to plain objects
     
         return result.map((practice) => ({
           _id: practice._id.toString(),
           date: practice.date,
           players: practice.players.map((player) => ({
-            playerId: player.playerId && typeof player.playerId === 'object'
+            player: typeof player.player === 'object' && 'name' in player.player
               ? {
-                  _id: (player.playerId as IPlayer)._id.toString(),
-                  name: (player.playerId as IPlayer).name || null,
+                  _id: (player.player as { _id: string })._id.toString(),
+                  name: (player.player as { name: string }).name,
                 }
-              : (player.playerId as Types.ObjectId),
-=======
-    practices: async () => {
-      try {
-        const result = await Practice.find().populate('players.playerId', 'name');
-        return result.map((practice: any) => ({
-          id: practice._id.toString(),
-          date: practice.date.toISOString(),
-          players: practice.players.map((player: any) => ({
-            playerId: player.playerId, // Fixed to directly assign playerId
->>>>>>> 66d20ef0d6156ba45b7acf71cfe58b481eea870a
+              : player.player as Types.ObjectId,
             droppedBalls: player.droppedBalls || 0,
             completedPasses: player.completedPasses || 0,
           })),
@@ -99,8 +89,7 @@ const practiceResolvers = {
         console.error('Error fetching practices:', error);
         throw new Error('Failed to fetch practices.');
       }
-<<<<<<< HEAD
-    };
+    },
     
     // Fetch player stats by practice and player ID
     getPlayerStatsById: async (
@@ -126,34 +115,6 @@ const practiceResolvers = {
 
         return {
           player: playerStats.player,
-=======
-    },
-
-    // Fetch player stats by practice and player ID
-    getPlayerStatsById: async (
-      _parent: unknown,
-      { practiceId, playerId }: GetPlayerStatsByIdArgs
-    ) => {
-      try {
-        const practice = await Practice.findById(practiceId).populate(
-          'players.playerId',
-          'name'
-        );
-        if (!practice) {
-          throw new Error('Practice document not found.');
-        }
-
-        const playerStats = practice.players.find(
-          (player) => player.playerId.toString() === playerId
-        );
-
-        if (!playerStats) {
-          throw new Error('Player stats not found in this practice.');
-        }
-
-        return {
-          player: playerStats.playerId,
->>>>>>> 66d20ef0d6156ba45b7acf71cfe58b481eea870a
           droppedBalls: playerStats.droppedBalls || 0,
           completedPasses: playerStats.completedPasses || 0,
         };
@@ -198,8 +159,8 @@ const practiceResolvers = {
           }
       
           // Create initial stats for all players
-          const playersStats: PlayerStats[] = allPlayers.map((player) => ({
-            playerId: player._id as Types.ObjectId,
+          const playersStats: IPlayerStats[] = allPlayers.map((player) => ({
+            player: player._id as Types.ObjectId,
             droppedBalls: 0,
             completedPasses: 0,
           }));
@@ -212,7 +173,7 @@ const practiceResolvers = {
           });
       
           // Save the practice to the database
-          const savedPractice: IPractice = await newPractice.save();
+          const savedPractice = await newPractice.save();
       
           // Populate player names in the saved practice
           await savedPractice.populate('players.playerId', 'name');
@@ -224,8 +185,8 @@ const practiceResolvers = {
             coach: savedPractice.coach,
             players: savedPractice.players.map((player) => ({
               player: {
-                id: (player.playerId as any)._id.toString(),
-                name: (player.playerId as any).name || null,
+                id: (player.player as any)._id.toString(),
+                name: (player.player as any).name || null,
               },
               droppedBalls: player.droppedBalls,
               completedPasses: player.completedPasses,
