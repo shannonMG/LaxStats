@@ -36,10 +36,10 @@ const PlayerDashboard = () => {
                 {
                         Practices.map((practice:any) => {
                             return (
-                                <li key={practice.practiceId} className="mb-4 border border-blue-500 py-6 min-w-[300px] ">
+                                <li key={practice.practiceId} className="mb-4 border border-blue-500 py-6 min-w-[300px] rounded-lg shadow-md group">
                                 {/* // <li className="playerPractice"> */}
                                     <div>{practice.practiceId}</div>
-                                    <div>
+                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                                         {/* this is the part that we need to hide eventually */}
                                         <h4>Completed Passes: {practice.completedPasses}</h4>
                                         <h4>Dropped Balls: {practice.droppedBalls}</h4>
