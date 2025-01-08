@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_PLAYER_STAT } from '../utils/mutations';
+import { GET_PLAYER_STATS } from '../utils/queries';
 
 interface StatButtonProps {
   practiceId: string;
@@ -11,7 +12,16 @@ interface StatButtonProps {
 }
 
 const StatButton: React.FC<StatButtonProps> = ({ practiceId, playerId, statName, increment, onStatUpdated }) => {
-  const [updatePlayerStat] = useMutation(UPDATE_PLAYER_STAT);
+  const [updatePlayerStat] = useMutation(UPDATE_PLAYER_STAT, {
+    refetchQueries: [
+      {
+        query: GET_PLAYER_STATS,
+        variables: { practiceId, playerId },
+
+      },
+    ],
+    awaitRefetchQueries: true,
+  } ) //add refetchQueries, 
 
   const handleClick = async () => {
     try {
