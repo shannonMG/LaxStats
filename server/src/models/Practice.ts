@@ -10,23 +10,39 @@ interface IPlayerStats {
 // Define an interface for the Practice document
 interface IPractice extends Document {
   date: Date;
-  coach: Types.ObjectId;
+  coach: Schema.Types.ObjectId;
   players: IPlayerStats[];
 }
 
 // Define the schema for the Practice document
-const playerStatsSchema = new Schema({
-  playerId: { type: Schema.Types.ObjectId, ref: 'User' }, 
-  droppedBalls: Number,
-  completedPasses: Number,
-});
-
 const practiceSchema = new Schema({
-  date: Date,
-  coach: { type: Schema.Types.ObjectId, ref: 'User' },
-  players: [playerStatsSchema],
+  date: {
+    type: Date,
+    required: true,
+  },
+  coach: {
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  players: [
+    {
+      playerId: {
+        type: Types.ObjectId,
+        ref: 'User', // Reference the User model
+        required: true,
+      },
+      droppedBalls: {
+        type: Number,
+        required: true,
+      },
+      completedPasses: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
-
 
 
 // Export the Practice model

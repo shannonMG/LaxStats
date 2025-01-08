@@ -14,16 +14,32 @@ export const QUERY_ME = gql`
 `;
 
 export const GET_PLAYER_STATS = gql`
-    query Query($practiceId: ID!, $playerId: ID!) {
-        getPlayerStatsById(practiceId: $practiceId, playerId: $playerId) {
-            completedPasses
-            droppedBalls
-            playerId
+  query GetPlayerStatsById($practiceId: ID!, $playerId: ID!) {
+  getPlayerStatsById(practiceId: $practiceId, playerId: $playerId) {
+    completedPasses
+    droppedBalls
   }
 }
 `
 
 // need to add more queries
+
+export const GET_PRACTICE = gql`
+  query GetPractice($practiceId: ID!) {
+    practice(id: $practiceId) {
+      id
+      date
+      players {
+        completedPasses
+        droppedBalls
+        player {
+          _id
+          name
+        }
+      }
+    }
+  }
+`;
 
 export const QUERY_PRACTICES=gql`
 query GetPracticesForPlayer($playerId: ID!) {
@@ -36,14 +52,16 @@ query GetPracticesForPlayer($playerId: ID!) {
 `
 
 export const QUERY_PRACTICES_FOR_COACH=gql`
-query Practices {
-  practices {
-    coach
-    date
+query GetPracticesByCoach($coachId: ID!) {
+  getPracticesByCoach(coachId: $coachId) {
     id
+    date
+    coach
     players {
+      completedPasses
+      droppedBalls
       player {
-        _id
+        name
       }
     }
   }

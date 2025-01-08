@@ -1,0 +1,13 @@
+interface PracticeDashboardProps {
+  practice: {
+    id: string;
+    players: Array<{
+      completedPasses: number;
+      droppedBalls: number;
+      player: {
+        _id: string;
+        name: string;
+      };
+    }>;
+  };
+}
