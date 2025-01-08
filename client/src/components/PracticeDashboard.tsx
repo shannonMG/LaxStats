@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PlayerCard from './PlayerCard';
 
 interface PracticeDashboardProps {
@@ -20,6 +20,27 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
     return <p>No practice found with the provided data.</p>;
   }
 
+  // Maintain state for player stats
+  const [playerStats, setPlayerStats] = useState(
+    practice.players.map((player) => ({
+      playerId: player.player._id,
+      name: player.player.name,
+      completedPasses: player.completedPasses,
+      droppedBalls: player.droppedBalls,
+    }))
+  );
+
+  // Function to handle stat updates
+  const handleStatUpdated = (playerId: string, updatedStats: { completedPasses: number; droppedBalls: number }) => {
+    setPlayerStats((prevStats) =>
+      prevStats.map((player) =>
+        player.playerId === playerId
+          ? { ...player, ...updatedStats }
+          : player
+      )
+    );
+  };
+
   return (
     <div>
       <h1>Practice Dashboard</h1>
@@ -27,16 +48,17 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
       <hr />
 
       {/* Render a PlayerCard for each player */}
-      {practice.players.map((playerObj) => (
+      {playerStats.map((player) => (
         <PlayerCard
-          key={playerObj.player._id}
-          playerId={playerObj.player._id}
-          playerName={playerObj.player.name}
+          key={player.playerId}
+          playerId={player.playerId}
+          playerName={player.name}
           practiceId={practice.id}
           stats={{
-            completedPasses: playerObj.completedPasses,
-            droppedBalls: playerObj.droppedBalls,
+            completedPasses: player.completedPasses,
+            droppedBalls: player.droppedBalls,
           }}
+          onStatUpdated={(updatedStats) => handleStatUpdated(player.playerId, updatedStats)}
         />
       ))}
     </div>
