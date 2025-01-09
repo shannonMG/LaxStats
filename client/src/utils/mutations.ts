@@ -31,34 +31,37 @@ export const LOGIN_USER = gql `
 `;
 
 export const UPDATE_PLAYER_STAT = gql ` 
-  mutation Mutation($practiceId: ID!, $playerId: ID!, $statName: String!, $increment: Int!) {
+mutation Mutation($practiceId: ID!, $playerId: ID!, $statName: String!, $increment: Int!) {
   updatePlayerStat(practiceId: $practiceId, playerId: $playerId, statName: $statName, increment: $increment) {
     id
     date
     coach
     players {
-      playerId
-      droppedBalls
       completedPasses
+      droppedBalls
+      player {
+        name
+      }
     }
   }
 }
+
 `;
 
 export const ADD_PRACTICE = gql `
-    mutation Mutation {
-        addPractice {
-            coach
-            date
-            id
-            players {
-                player {
-                    _id
-                    name
-             }
-             droppedBalls
-            completedPasses
-           }
-        }
+  mutation Mutation {
+  addPractice {
+    id
+    date
+    coach
+    players {
+      completedPasses
+      droppedBalls
+      player {
+        _id
+        name
+      }
+    }
+  }
 }
 `;

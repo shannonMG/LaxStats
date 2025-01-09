@@ -9,7 +9,6 @@ input PlayerStatsInput {
 # Input type for creating a new practice
 input PracticeInput {
   date: String!
-  coach: ID!
   players: [PlayerStatsInput!]!
 }
 
@@ -47,8 +46,6 @@ type Player {
 # Mutation type for creating a new practice
 type Mutation {
   addPractice: Practice!
-  updateDroppedBalls(playerId: ID!, droppedBalls: Int!): Practice
-  updateCompletedPasses(playerId: ID!, completedPasses: Int!): Practice
   updatePlayerStat(
     practiceId: ID!,
     playerId: ID!,
@@ -57,8 +54,6 @@ type Mutation {
   ): Practice!
 }
 
-
-# Query type for fetching practices
 # Query type for fetching practices
 type Query {
   practices: [Practice]
@@ -67,7 +62,10 @@ type Query {
   # Given a playerId, return all practices that the player is part of,
   # along with their stats in each.
   getPracticesForPlayer(playerId: ID!): [PlayerPracticeData!]!
+  getPracticesByCoach(coachId: ID!): [Practice!]!
 }
+
+
 
 
 # SK added these mutations for updated stats taking into account the playerID
