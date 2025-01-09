@@ -3,6 +3,8 @@ import StatButton from './StatButton';
 import { PlayerCardProps } from '../interfaces/PlayerCard';
 
 const PlayerCard: React.FC<PlayerCardProps> = ({ playerId, playerName, practiceId, stats, onStatUpdated }) => {
+  
+  
   return (
     <div>
       <h3>{playerName}</h3>
