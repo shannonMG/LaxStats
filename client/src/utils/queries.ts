@@ -52,8 +52,10 @@ query GetPracticesForPlayer($playerId: ID!) {
 `
 
 export const QUERY_PRACTICES_FOR_COACH=gql`
-query GetPracticesByCoach($coachId: ID!) {
-  getPracticesByCoach(coachId: $coachId) {
+query GetAllPractices {
+  practices {
+    coach
+    date
     id
     date
     coach
@@ -61,9 +63,12 @@ query GetPracticesByCoach($coachId: ID!) {
       completedPasses
       droppedBalls
       player {
+        _id
         name
       }
+      droppedBalls
+      completedPasses
     }
   }
 }
-`
+`;
