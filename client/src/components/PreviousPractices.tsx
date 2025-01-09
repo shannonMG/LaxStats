@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_PRACTICES_FOR_COACH } from '../utils/queries';
 
+const PreviousPractices = () => {
 
     const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH);
 
@@ -37,6 +38,6 @@ import { QUERY_PRACTICES_FOR_COACH } from '../utils/queries';
             </ul>
         </div>
     );
-  };
-  
-  export default PreviousPractices;
+};
+
+export default PreviousPractices;
