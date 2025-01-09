@@ -54,7 +54,22 @@ interface PlayerStatsParent {
 const practiceResolvers = {
   Query: {
     practices: async () => {
-      return Practice.find();
+      try {
+        const result = await Practice.find().populate('players.playerId', 'name');
+        return result.map((practice: any) => ({
+          id: practice._id.toString(),
+          coach: practice.coach.toString(),
+          date: practice.date.toISOString(),
+          players: practice.players.map((player: any) => ({
+            playerId: practice.playerId,
+            droppedBalls: player.droppedBalls || 0,
+            completedPasses: player.completedPasses || 0,
+          })),
+        }));
+      } catch (error) {
+        console.error('Error fetching practices:', error);
+        throw new Error('Failed to fetch practices');
+      }
     },
     //this gets the stats for a given player at a give practice. 
     getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
