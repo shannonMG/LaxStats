@@ -1,42 +1,46 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_PRACTICES_FOR_COACH } from '../utils/queries';
+import auth from '../utils/auth';
 
+const PreviousPractices = () => {
 
-    const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH);
+    const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH, {
+        variables:{"coachId": auth.getId()}
+    });
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>
     
+    const practices = data?.getPracticesByCoach || [];
+
     return (
         <div>
-            <h2>Previous Practices</h2>
-            <ul>
-                {data.practices.map((practice:any) => {
-                    return (
-                        <li>
-                            <div key={practice.id}>
-                                <h3>
-                                    {practice.coach} held this practice on {new Date((practice.date)).toLocaleDateString()}.
-                                </h3>
-                                <p>Players:</p>
-                                <ul>
-                                    {practice.players.map((player: any) => {
-                                        return (
-                                            <li key={player._id}>
-                                                <h4>{player.name}</h4><br/>
-                                                <p>Dropped Balls: {player.droppedBalls}</p>
-                                                <p>Completed Passes: {player.completedPasses}</p>
-                                            </li>
-                                        )
-                                    })}
-                                </ul>
-                            </div>
-                        </li>
-                    )
-                })}
-            </ul>
+          <h2>Previous Practices</h2>
+          {practices.length === 0 ? (
+            <p>No practices found.</p>
+          ) : (
+            practices.map((practice: any) => (
+              <div key={practice.id} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}>
+                <p><strong>Practice ID:</strong> {practice.id}</p>
+                <p><strong>Date:</strong> 
+                  {isNaN(new Date(practice.date).getTime())
+                    ? 'Invalid Date'
+                    : new Date(practice.date).toLocaleDateString()}
+                </p>
+    
+                <h3>Players:</h3>
+                {practice.players.map((player: any) => (
+                  <div key={player.player.id} style={{ marginLeft: '20px' }}>
+                    <p><strong>Name:</strong> {player.player.name}</p>
+                    <p><strong>Completed Passes:</strong> {player.completedPasses}</p>
+                    <p><strong>Dropped Balls:</strong> {player.droppedBalls}</p>
+                  </div>
+                ))}
+              </div>
+            ))
+          )}
         </div>
-    );
-  };
-  
-  export default PreviousPractices;
+      );
+    };
+
+export default PreviousPractices;
