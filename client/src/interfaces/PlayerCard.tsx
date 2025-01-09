@@ -6,4 +6,6 @@ export interface PlayerCardProps {
     completedPasses: number; // Initial value for completed passes.
     droppedBalls: number; // Initial value for dropped balls.
   };
+  onStatUpdated: (updatedStats: { completedPasses: number; droppedBalls: number }) => void; // Callback for updating stats
+
 }

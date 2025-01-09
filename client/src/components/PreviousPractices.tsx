@@ -1,39 +1,31 @@
 import { useQuery } from '@apollo/client';
 import { QUERY_PRACTICES_FOR_COACH } from '../utils/queries';
-import auth from '../utils/auth';
 
-const PreviousPractices = () => {
 
-    const {loading, data}=useQuery(QUERY_PRACTICES_FOR_COACH, {
-        variables:{
-            "coach": auth.getId()
-        }
-    })
+    const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH);
 
-    const Practices=data?.Practices || []
-    if (loading){
-        return <h2>Loading, please wait...</h2>
-    }
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>
     
     return (
         <div>
-            <h3>Previous Practices</h3>
+            <h2>Previous Practices</h2>
             <ul>
-                {Practices.map((practice:any) => {
+                {data.practices.map((practice:any) => {
                     return (
                         <li>
                             <div key={practice.id}>
-                                <h4>
-                                    {practice.coach} held this practice on {new Date(Number(practice.date)).toLocaleDateString()}.
-                                </h4>
+                                <h3>
+                                    {practice.coach} held this practice on {new Date((practice.date)).toLocaleDateString()}.
+                                </h3>
                                 <p>Players:</p>
                                 <ul>
-                                    {practice.players.map(() => {
+                                    {practice.players.map((player: any) => {
                                         return (
-                                            <li>
-                                                <div key={practice.players.player._id}>
-                                                    <p>{practice.players.player._id}</p>
-                                                </div>
+                                            <li key={player._id}>
+                                                <h4>{player.name}</h4><br/>
+                                                <p>Dropped Balls: {player.droppedBalls}</p>
+                                                <p>Completed Passes: {player.completedPasses}</p>
                                             </li>
                                         )
                                     })}
@@ -45,6 +37,6 @@ const PreviousPractices = () => {
             </ul>
         </div>
     );
-};
-
-export default PreviousPractices;
+  };
+  
+  export default PreviousPractices;
