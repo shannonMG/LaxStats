@@ -4,7 +4,7 @@ import auth from '../utils/auth';
 // import {useState} from 'react';
 
 const PreviousPractices = () => {
-
+   
     const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH, {
         variables:{"coachId": auth.getId()}
     });

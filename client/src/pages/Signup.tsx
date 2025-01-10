@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
@@ -14,7 +14,7 @@ const Signup = () => {
         username: '',
     });
 
-    const [addUser, {error, data }] = useMutation(ADD_USER);
+    const [addUser] = useMutation(ADD_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
