@@ -77,7 +77,7 @@ const CoachDashboard = () => {
       {/* 9) Render the previous practices if toggled on */}
       {isPreviousOpen && coachId && (
         <div>
-          <PreviousPractices coachId={coachId}/>
+          <PreviousPractices/>
         </div>
       )}
     </div>
