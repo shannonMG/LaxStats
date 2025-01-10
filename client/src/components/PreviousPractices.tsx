@@ -22,10 +22,11 @@ const PreviousPractices = () => {
             practices.map((practice: any) => (
               <div key={practice.id} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}>
                 <p><strong>Practice ID:</strong> {practice.id}</p>
-                <p><strong>Date:</strong> 
-                  {isNaN(new Date(practice.date).getTime())
+                <p><strong>Date: </strong>
+                    {new Date(Number(practice.date)).toLocaleDateString()}
+                  {/* {isNaN(new Date(practice.date).getTime())
                     ? 'Invalid Date'
-                    : new Date(practice.date).toLocaleDateString()}
+                    : new Date(practice.date).toLocaleDateString()} */}
                 </p>
     
                 <h3>Players:</h3>
