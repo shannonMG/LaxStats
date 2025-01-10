@@ -5,7 +5,7 @@ import { Document, Types } from 'mongoose'; // Import Mongoose types for type-ch
 
 // Define the structure of PlayerStats: stats that belong to each player in practice
 interface PlayerStats {
-  playerId: Types.ObjectId;         // The ID of the player
+  playerId: Types.ObjectId | {_id: string; name: string};         // The ID of the player
   droppedBalls: number;     // The number of dropped balls by the player
   completedPasses: number;  // The number of completed passes by the player
 }
@@ -49,9 +49,6 @@ interface PlayerStatsParent {
   completedPasses?: number;
 }
 
-
-
-
 // Define the resolvers for the Practice schema
 const practiceResolvers = {
   Query: {
@@ -74,40 +71,52 @@ const practiceResolvers = {
       }
     },
     
-    //this gets the stats for a given player at a give practice. 
     getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
       try {
-        // 1. Find the practice document by its ID
+        // Validate IDs
+        if (!Types.ObjectId.isValid(practiceId)) {
+          throw new Error('Invalid practiceId format.');
+        }
+        if (!Types.ObjectId.isValid(playerId)) {
+          throw new Error('Invalid playerId format.');
+        }
+  
+        // Step 1: Find the practice document by its ID and populate player details
         const practice = await Practice.findById(practiceId).populate({
           path: 'players.playerId',
-          select: 'name email', // Include only the fields you want from the user
-        })
-      ;
+          select: 'name _id', // Include the player's name and ID
+        });
+        console.log('Populated Practice:', JSON.stringify(practice, null, 2));
         if (!practice) {
           throw new Error('Practice document not found.');
         }
-    
-        // 2. Find the player stats within the players array
+        console.log('Incoming playerId:', playerId);
+
+        // Step 2: Find the player stats within the players array
         const playerStats = practice.players.find(
-          (player) => player.playerId.toString() === playerId
+          (player) => player.playerId && player.playerId._id.toString() === playerId
         );
-    
-        if (!playerStats) {
-          throw new Error('Player stats not found in this practice.');
+        console.log('Player stats:', playerStats);
+  
+        if (!playerStats || !(playerStats.playerId as { _id: string; name: string }).name) {
+          throw new Error('Player stats or player name not found in this practice.');
         }
-    
-        // 3. Return only the player's stats
+  
+        
         return {
+          playerId: {
+          _id: playerStats.playerId._id, // User ID from the populated player document
+          name: (playerStats.playerId as { _id: string; name: string }).name // Player's name from the populated player document
+          },
           droppedBalls: playerStats.droppedBalls,
           completedPasses: playerStats.completedPasses,
         };
       } catch (error) {
-        console.error('Error fetching player stats:', error);
+        if (error instanceof Error)
+        console.error('Error fetching player stats:', error.message);
         throw new Error('Failed to fetch player stats.');
       }
     },
-    
-    
     
     getPracticesForPlayer: async (_parent: any, { playerId }: { playerId: string }) => {
       try {

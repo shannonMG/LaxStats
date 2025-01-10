@@ -16,11 +16,13 @@ interface PracticeDashboardProps {
 }
 
 const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
+  // Guard in case `practice` is undefined
   if (!practice) {
     return <p>No practice found with the provided data.</p>;
   }
 
-  // Maintain state for player stats
+  // 1) Maintain state for each player’s stats in an array.
+  //    This state is the "single source of truth."
   const [playerStats, setPlayerStats] = useState(
     practice.players.map((player) => ({
       playerId: player.player._id,
@@ -30,8 +32,14 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
     }))
   );
 
-  // Function to handle stat updates
-  const handleStatUpdated = (playerId: string, updatedStats: { completedPasses: number; droppedBalls: number }) => {
+  // 2) Callback to handle any stat update from children
+  const handleStatUpdated = (
+    playerId: string,
+    updatedStats: {
+      completedPasses: number;
+      droppedBalls: number;
+    }
+  ) => {
     setPlayerStats((prevStats) =>
       prevStats.map((player) =>
         player.playerId === playerId
@@ -47,7 +55,8 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
       <p>Practice ID: {practice.id}</p>
       <hr />
 
-      {/* Render a PlayerCard for each player */}
+      {/* 3) Render a PlayerCard for each player.
+          Pass in the relevant stats and the update callback. */}
       {playerStats.map((player) => (
         <PlayerCard
           key={player.playerId}
@@ -58,7 +67,9 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
             completedPasses: player.completedPasses,
             droppedBalls: player.droppedBalls,
           }}
-          onStatUpdated={(updatedStats) => handleStatUpdated(player.playerId, updatedStats)}
+          onStatUpdated={(updatedStats) =>
+            handleStatUpdated(player.playerId, updatedStats)
+          }
         />
       ))}
     </div>

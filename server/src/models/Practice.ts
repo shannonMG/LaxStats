@@ -2,7 +2,7 @@ import { Schema, model, Document, Types } from 'mongoose';
 
 // Define the interface for Player stats
 interface IPlayerStats {
-  playerId: Types.ObjectId;
+  playerId: Types.ObjectId | {_id: string; name: string};
   droppedBalls: number;
   completedPasses: number;
 }
