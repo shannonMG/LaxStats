@@ -3,7 +3,7 @@ import { QUERY_PRACTICES_FOR_COACH } from '../utils/queries';
 import auth from '../utils/auth';
 
 const PreviousPractices = () => {
-
+   
     const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH, {
         variables:{"coachId": auth.getId()}
     });
