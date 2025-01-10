@@ -8,32 +8,43 @@ interface StatButtonProps {
   playerId: string;
   statName: 'completedPasses' | 'droppedBalls';
   increment: number;
-  onStatUpdated: (updatedStats: { completedPasses: number; droppedBalls: number }) => void;
+  onStatUpdated: (updatedStats: {
+    completedPasses: number;
+    droppedBalls: number;
+  }) => void;
 }
 
-const StatButton: React.FC<StatButtonProps> = ({ practiceId, playerId, statName, increment, onStatUpdated }) => {
+const StatButton: React.FC<StatButtonProps> = ({
+  practiceId,
+  playerId,
+  statName,
+  increment,
+  onStatUpdated,
+}) => {
   const [updatePlayerStat] = useMutation(UPDATE_PLAYER_STAT, {
     refetchQueries: [
       {
         query: GET_PLAYER_STATS,
         variables: { practiceId, playerId },
-
       },
     ],
     awaitRefetchQueries: true,
-  } ) //add refetchQueries, 
+  });
 
   const handleClick = async () => {
     try {
+      // 1) Run the GraphQL mutation to update the stat.
       const { data } = await updatePlayerStat({
         variables: { practiceId, playerId, statName, increment },
       });
 
-      // Extract the updated player stats from the mutation response
-      const updatedPlayer = data?.updatePlayerStat.players.find((player: any) => player.player._id === playerId);
+      // 2) The mutation result should contain updated stats in data.updatePlayerStat.players
+      const updatedPlayer = data?.updatePlayerStat.players.find(
+        (p: any) => p.player._id === playerId
+      );
 
+      // 3) Pass new stats back up to the parent via onStatUpdated
       if (updatedPlayer) {
-        // Call onStatUpdated with the updated stats
         onStatUpdated({
           completedPasses: updatedPlayer.completedPasses,
           droppedBalls: updatedPlayer.droppedBalls,
@@ -44,7 +55,11 @@ const StatButton: React.FC<StatButtonProps> = ({ practiceId, playerId, statName,
     }
   };
 
-  return <button onClick={handleClick}>{increment > 0 ? '+' : '-'}</button>;
+  return (
+    <button onClick={handleClick}>
+      {increment > 0 ? '+' : '-'}
+    </button>
+  );
 };
 
 export default StatButton;
