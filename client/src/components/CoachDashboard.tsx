@@ -52,7 +52,7 @@ const CoachDashboard = () => {
   };
 
   return (
-    <div>
+    <div >
       <h1>Coach Dashboard</h1>
       <p>Welcome, Coach!</p>
       <p>This is your dashboard where you can:</p>
