@@ -28,7 +28,7 @@ const PlayerDashboard = () => {
                 These are your practices, hover over to see stats:
                 </p>
             </div> 
-            <div class="grid grid-cols-2 gap-4 px-2 w-full">
+            <div className="grid grid-cols-2 gap-4 px-2 w-full">
                 <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
                 <p className="text-sm text-gray-600"></p>
                 <p className="text-base font-medium text-navy-700 dark:text-white">
