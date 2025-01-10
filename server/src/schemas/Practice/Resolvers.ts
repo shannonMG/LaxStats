@@ -78,7 +78,11 @@ const practiceResolvers = {
     getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
       try {
         // 1. Find the practice document by its ID
-        const practice = await Practice.findById(practiceId);
+        const practice = await Practice.findById(practiceId).populate({
+          path: 'players.playerId',
+          select: 'name email', // Include only the fields you want from the user
+        })
+      ;
         if (!practice) {
           throw new Error('Practice document not found.');
         }
