@@ -30,6 +30,7 @@ type PlayerPracticeData {
   practiceId: ID!
   droppedBalls: Int
   completedPasses: Int
+  date: String!
   # include the date as well (to better reference)
 }
 

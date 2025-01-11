@@ -20,6 +20,7 @@
     "@graphql-tools/utils": "^10.6.2",
     "@types/graphql": "^14.2.3",
     "bcrypt": "^5.0.0",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "graphql": "^16.9.0",

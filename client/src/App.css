@@ -4,3 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.activeLink {
+    background-color:darkblue;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.headerLink {
+    padding: 10px;
+    border-radius: 5px;
+}

@@ -1,24 +1,33 @@
 import { Link } from 'react-router-dom';
 import { type MouseEvent } from 'react';
 import Auth from '../utils/auth';
+import { useState, useEffect } from 'react';
 
 
 const Header = () => {
+
+    const [currentPage, setCurrentPage] = useState("");
+
+    useEffect(() => {
+        setCurrentPage(window.location.href.split("/")[3])
+    }, [])
+
     const logout = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         Auth.logout();
     };
+
     return (
         <nav className="bg-cyan-400 border border-gray-200 dark:border-gray-700 px-2 sm:px-4 py-8 rounded dark:bg-gray-800 shadow">
             <div className="container flex flex-wrap justify-between items-center mx-auto">
                 <a href="/" className="flex items-center">
                     <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                    <div>
-                     <Link to='/'>
-                         <h1>LaxStats</h1>
-                     </Link>
-                     <p className="text-xs">Track your teams stats here! Or something idk...</p>
-                 </div>
+                        <div>
+                            <Link to='/'>
+                                <h1>LaxStats</h1>
+                            </Link>
+                            <p className="text-xs">Track your teams stats here! Or something idk...</p>
+                        </div>
                     </span>
                 </a>
 
@@ -46,39 +55,49 @@ const Header = () => {
                     id="mobile-menu"
                 >
                     <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-                    {Auth.loggedIn()? (
-                        <>
-                            <Link to='/me'>
-                                {Auth.getDashboard().data.username}'s profile
-                            </Link>
-                            <button onClick={logout}>
-                                Logout
-                            </button>
-                        </>
-                    ):(
-                        <>
-                            <Link to='/login'>
-                                Login
-                            </Link>
-                            <Link to='/signup'>
-                                Signup
-                            </Link>
-                        </>
-                    )}
+                        {Auth.loggedIn() ? (
+                            <>
+                                <Link to='/me'>
+                                    {Auth.getDashboard().data.username}'s profile
+                                </Link>
+                                <button onClick={logout}>
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to='/login'>
+                                    <p
+                                        className={currentPage == "login" ? "activeLink" : "headerLink"}
+                                        onClick={() => {
+                                            setCurrentPage("login")
+                                        }}
+                                    >Login</p>
+                                </Link>
+                                <Link to='/signup'>
+                                    <p
+                                        className={currentPage == "signup" ? "activeLink" : "headerLink"}
+                                        onClick={() => {
+                                            setCurrentPage("signup")
+                                        }}
+                                    >Signup</p>
+                                </Link>
+                            </>
+                        )}
                     </ul>
                 </div>
 
             </div>
         </nav>
 
-/* <script>
-  const menuToggle = document.getElementById('menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-
-  menuToggle.addEventListener('click', function () {
-    mobileMenu.classList.toggle('hidden');
-  });
-</script> */
+        /* <script>
+          const menuToggle = document.getElementById('menu-toggle');
+          const mobileMenu = document.getElementById('mobile-menu');
+        
+          menuToggle.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+          });
+        </script> */
         // <header>
         //     <div>
         //         <div>
@@ -88,25 +107,25 @@ const Header = () => {
         //             <p>Track your teams stats here! Or something idk...</p>
         //         </div>
         //         <div>
-                    // {Auth.loggedIn()? (
-                    //     <>
-                    //         <Link to='/me'>
-                    //             {Auth.getDashboard().data.username}'s profile
-                    //         </Link>
-                    //         <button onClick={logout}>
-                    //             Logout
-                    //         </button>
-                    //     </>
-                    // ):(
-                    //     <>
-                    //         <Link to='/login'>
-                    //             Login
-                    //         </Link>
-                    //         <Link to='/signup'>
-                    //             Signup
-                    //         </Link>
-                    //     </>
-                    // )}
+        // {Auth.loggedIn()? (
+        //     <>
+        //         <Link to='/me'>
+        //             {Auth.getDashboard().data.username}'s profile
+        //         </Link>
+        //         <button onClick={logout}>
+        //             Logout
+        //         </button>
+        //     </>
+        // ):(
+        //     <>
+        //         <Link to='/login'>
+        //             Login
+        //         </Link>
+        //         <Link to='/signup'>
+        //             Signup
+        //         </Link>
+        //     </>
+        // )}
         //         </div>
         //     </div>
         // </header>
