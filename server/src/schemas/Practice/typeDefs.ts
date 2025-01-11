@@ -14,9 +14,14 @@ input PracticeInput {
 
 # Type for individual player stats at a practice
 type PlayerStats {
-  player: User       # Notice we use 'player' instead of 'playerId'
+  player: Player       # Notice we use 'player' instead of 'playerId'
   droppedBalls: Int
   completedPasses: Int
+}
+
+type Player {
+  userId: ID!
+  name: String!
 }
 
 
@@ -58,7 +63,7 @@ type Mutation {
 type Query {
   practices: [Practice]
   practice(id: ID!): Practice
-  getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats!
+  getPlayerStatsById(practiceId: ID!, playerId: ID!): PlayerStats
   # Given a playerId, return all practices that the player is part of,
   # along with their stats in each.
   getPracticesForPlayer(playerId: ID!): [PlayerPracticeData!]!
