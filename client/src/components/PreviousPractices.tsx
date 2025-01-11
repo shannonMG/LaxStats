@@ -18,7 +18,7 @@ const PreviousPractices = () => {
     const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH, {
         variables:{"coachId": auth.getId()}
     });
-    const [accordionOpen, setAccordionOpen] = useState(false);
+    const [accordionOpen, setAccordionOpen] = useState(true);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -45,8 +45,8 @@ const PreviousPractices = () => {
                 {new Date(Number(practice.date)).toLocaleDateString()}
               </p>
               </button>
-            <div className={`${accordionOpen? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-              <div className='overflow-hidden'>
+            <div className={`${accordionOpen? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 hidden'}`}>
+              <div>
                 <h3>Players:</h3>
                 {practice.players.map((player: any) => (
                   <div key={player.player.id} style={{ marginLeft: '20px' }}>
