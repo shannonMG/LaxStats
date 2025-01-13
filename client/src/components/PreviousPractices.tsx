@@ -19,12 +19,18 @@ const PreviousPractices = () => {
   const {loading, error, data}=useQuery(QUERY_PRACTICES_FOR_COACH, {
       variables:{"coachId": auth.getId()}
   });
-  const [accordionOpen, setAccordionOpen] = useState(true);
+
+  const [openPracticeId, setOpenPracticeId] = useState<string|null>(null);
+  // const [accordionOpen, setAccordionOpen] = useState(true);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const practices = data?.getPracticesByCoach || [];
+
+  const togglePractice = (practiceId: string) => {
+    setOpenPracticeId((prevId) => (prevId === practiceId? null:practiceId));
+  }
 
   return (
     <div>
@@ -32,42 +38,63 @@ const PreviousPractices = () => {
       {practices.length === 0 ? (
         <p>No practices found.</p>
       ) : (
-        practices.map((practice:any) => (
-          <div
-            key={practice.id}
-            style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}
-          >
-            {/* <p>
-              <strong>Practice ID:</strong> {practice.id}
-            </p> */}
-            <button onClick={() => setAccordionOpen(!accordionOpen)} className="bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-2 px-4 border-b-4 border-black-700 hover:border-black-500 rounded">
-              <p>
-                <strong>Practice Date: </strong>
-                {new Date(Number(practice.date)).toLocaleDateString()}
-              </p>
-              </button>
-            <div className={`${accordionOpen? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0 hidden'}`}>
-              <div >
-                <h3>Players:</h3>
-                {practice.players.map((player: any) => (
-                  <div key={player.player.id} style={{ marginLeft: '20px' }} className="mb-4 border border-cyan-300 py-6 min-w-[100px] rounded-lg shadow-md group">
-                    <p>
-                      <strong>Name:</strong> {player.player.name}
-                    </p>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <p>
-                        <strong>Completed Passes:</strong> {player.completedPasses}
-                      </p>
-                      <p>
-                        <strong>Dropped Balls:</strong> {player.droppedBalls}
-                      </p>
-                    </div>
-                  </div>
-              ))}
+        practices.map((practice:any) => {
+          const isOpen = openPracticeId === practice.id;
+          return (
+            <div
+              key={practice.id}
+              style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}
+            >
+              <div
+                onClick={() => togglePractice(practice.id)}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <p className="text-gray-600 font-medium">
+                  <strong>Practice Date: </strong>
+                  {new Date(Number(practice.date)).toLocaleDateString()}
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className={`w-6 h-6 transform transition-transform duration-300 ${
+                    isOpen ? 'rotate-90' : ''
+                  }`}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
               </div>
+              {isOpen && (
+                <div className="mt-4">
+                  <div className="mt-2">
+                    <h3 className="font-medium">Players:</h3>
+                    {practice.players.map((player: any) => (
+                      <div key={player.player.id} className="ml-4 mt-2">
+                        <p>
+                          <strong>Name:</strong> {player.player.name}
+                        </p>
+                        <p>
+                          <strong>Completed Passes:</strong>{' '}
+                          {player.completedPasses}
+                        </p>
+                        <p>
+                          <strong>Dropped Balls:</strong>{' '}
+                          {player.droppedBalls}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        ))
+          )
+        })
       )}
     </div>
   );
