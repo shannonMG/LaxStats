@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PRACTICE } from '../utils/mutations';
+import PreviousPractices from './PreviousPractices';
 import PracticeDashboard from './PracticeDashboard';
 import AuthService from '../utils/auth';
 
@@ -86,7 +87,7 @@ const CoachDashboard = () => {
       {/* Render the previous practices if toggled on */}
       {isPreviousOpen && coachId && (
         <div>
-          {/* <PreviousPractices /> */}
+          <PreviousPractices />
         </div>
       )}
     </div>
