@@ -8,6 +8,7 @@ import Auth from '../utils/auth';
 
 const Login = () => {
     const [formState, setFormState] = useState({ username: '', password: '' });
+    const [showError, setShowError] = useState(false)
     const [login] = useMutation(LOGIN_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,7 @@ const Login = () => {
             Auth.login(data.login.token);
         } catch (e) {
             console.log(e);
+            setShowError(true)
         }
 
         setFormState({
@@ -41,7 +43,7 @@ const Login = () => {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style={{
             // backgroundImage: "url('https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80')"
-             backgroundImage:  "url('https://images.unsplash.com/photo-1542291155424-62890f5ed94f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
+            backgroundImage: "url('https://images.unsplash.com/photo-1542291155424-62890f5ed94f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
         }}>
             <div className="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
                 <div className="text-white">
@@ -70,6 +72,16 @@ const Login = () => {
                                 value={formState.password}
                                 onChange={handleChange} />
                         </div>
+                        {
+                            showError ?
+                                (
+                                    <div className="mb-4 text-lg">
+                                        <p className="text-red-600 text-center w-full">Failed to login</p>
+                                    </div>
+                                ) :
+                                null
+                        }
+
                         <div className="mt-8 flex justify-center text-lg text-black">
                             <button type="submit" className="rounded-3xl bg-yellow-400 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-yellow-600">Login</button>
                         </div>
