@@ -4,7 +4,7 @@ const Footer = () => {
     const location = useLocation();
     const navigate = useNavigate();
     return (
-        <footer>
+        <footer className="p-4 bg-white rounded-lg shadow md:px-6 md:py-8 dark:bg-gray-800 overflow-hidden flex flex-col justify-center items-center">
             <div>
             {location.pathname !== '/' && (
                 <button
@@ -13,7 +13,7 @@ const Footer = () => {
                 &larr; Go Back
                 </button>
             )}
-                <h4>
+                <h4 >
                     Made with{' '}
                     <span
                     className="emoji"

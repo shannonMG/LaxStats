@@ -105,7 +105,7 @@ const practiceResolvers = {
         
         return {
           playerId: {
-          _id: playerStats.playerId._id, // User ID from the populated player document
+          _id: playerStats.playerId._id.toString(), // User ID from the populated player document
           name: (playerStats.playerId as { _id: string; name: string }).name // Player's name from the populated player document
           },
           droppedBalls: playerStats.droppedBalls,

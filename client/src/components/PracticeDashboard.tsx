@@ -50,7 +50,7 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 overflow-hidden flex flex-col justify-center items-center ">
       <h1 className="text-2xl font-bold mb-2">Practice Dashboard</h1>
       <p className="text-gray-700 mb-4">Practice ID: {practice.id}</p>
       <hr className="mb-6" />

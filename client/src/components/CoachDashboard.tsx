@@ -1,25 +1,23 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PRACTICE } from '../utils/mutations';
-// import PreviousPractices from './PreviousPractices';
 import PracticeDashboard from './PracticeDashboard';
 import AuthService from '../utils/auth';
 
-
-
 const CoachDashboard = () => {
   const coachId = AuthService.getId();
-  // 1) Local state for toggling and storing the full practice object
+
+  // Local state for toggling and storing the full practice object
   const [isPracticeOpen, setIsPracticeOpen] = useState(false);
   const [practice, setPractice] = useState<any | null>(null); // Store the full practice object
 
-  // 2) Local state for toggling the PreviousPractices panel
+  // Local state for toggling the PreviousPractices panel
   const [isPreviousOpen, setIsPreviousOpen] = useState(false);
 
-  // 3) Apollo mutation hook
+  // Apollo mutation hook
   const [addPractice] = useMutation(ADD_PRACTICE);
 
-  // 4) Toggle "Start new practice" button
+  // Toggle "Start new practice" button
   const handleClickNewPractice = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
@@ -45,7 +43,7 @@ const CoachDashboard = () => {
     }
   };
 
-  // 5) Toggle "Previous Practices" button
+  // Toggle "Previous Practices" button
   const handleClickPreviousPractices = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setIsPreviousOpen((prev) => !prev);
@@ -53,31 +51,42 @@ const CoachDashboard = () => {
 
   return (
     <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden flex flex-col justify-center items-center p-6">
-      
       <h1 className="text-xl font-semibold mb-2">Welcome, Coach!</h1>
       <p>This is your dashboard where you can:</p>
 
-      {/* 6) Button to create / close a new practice */}
-      <button id="startPractice" onClick={handleClickNewPractice} className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white">
-        {isPracticeOpen ? 'Close new practice' : 'Start a new practice'}
-      </button>
+      {/* Button to create/close a new practice */}
+      {!isPreviousOpen && (
+        <button
+          id="startPractice"
+          onClick={handleClickNewPractice}
+          className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white"
+        >
+          {isPracticeOpen ? 'Close new practice' : 'Start a new practice'}
+        </button>
+      )}
 
-      {/* 7) Render the PracticeDashboard if open AND we have a valid practice object */}
+      {/* Render the PracticeDashboard if open AND we have a valid practice object */}
       {isPracticeOpen && practice && (
         <div>
           <PracticeDashboard practice={practice} />
         </div>
       )}
 
-      {/* 8) Button to show previous practices */}
-      <button id="previousPractices" onClick={handleClickPreviousPractices} className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white">
-        {isPreviousOpen ? 'Close previous practices' : 'See previous practices'}
-      </button>
+      {/* Button to show/close previous practices */}
+      {!isPracticeOpen && (
+        <button
+          id="previousPractices"
+          onClick={handleClickPreviousPractices}
+          className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white"
+        >
+          {isPreviousOpen ? 'Close previous practices' : 'See previous practices'}
+        </button>
+      )}
 
-      {/* 9) Render the previous practices if toggled on */}
+      {/* Render the previous practices if toggled on */}
       {isPreviousOpen && coachId && (
         <div>
-          {/* <PreviousPractices/> */}
+          {/* <PreviousPractices /> */}
         </div>
       )}
     </div>
