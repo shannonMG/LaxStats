@@ -28,8 +28,12 @@ const StatButton: React.FC<StatButtonProps> = ({
         variables: { practiceId, playerId },
       },
     ],
-    awaitRefetchQueries: true,
+    awaitRefetchQueries: true
+    
   });
+
+  
+
 
   const handleClick = async () => {
     try {
@@ -42,6 +46,8 @@ const StatButton: React.FC<StatButtonProps> = ({
       const updatedPlayer = data?.updatePlayerStat.players.find(
         (p: any) => p.player._id === playerId
       );
+      console.log('updatedPlayer from mutation:', updatedPlayer);
+
 
       // 3) Pass new stats back up to the parent via onStatUpdated
       if (updatedPlayer) {

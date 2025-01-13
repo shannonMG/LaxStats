@@ -40,6 +40,7 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
       droppedBalls: number;
     }
   ) => {
+    console.log('handleStatUpdated called:', playerId, updatedStats);
     setPlayerStats((prevStats) =>
       prevStats.map((player) =>
         player.playerId === playerId
@@ -57,6 +58,8 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
 
       {/* 3) Render a PlayerCard for each player.
           Pass in the relevant stats and the update callback. */}
+     console.log('Rendering with playerStats:', playerStats);
+
       {playerStats.map((player) => (
         <PlayerCard
           key={player.playerId}
