@@ -50,30 +50,33 @@ const PracticeDashboard: React.FC<PracticeDashboardProps> = ({ practice }) => {
   };
 
   return (
-    <div>
-      <h1>Practice Dashboard</h1>
-      <p>Practice ID: {practice.id}</p>
-      <hr />
-
-      {/* 3) Render a PlayerCard for each player.
-          Pass in the relevant stats and the update callback. */}
-      {playerStats.map((player) => (
-        <PlayerCard
-          key={player.playerId}
-          playerId={player.playerId}
-          playerName={player.name}
-          practiceId={practice.id}
-          stats={{
-            completedPasses: player.completedPasses,
-            droppedBalls: player.droppedBalls,
-          }}
-          onStatUpdated={(updatedStats) =>
-            handleStatUpdated(player.playerId, updatedStats)
-          }
-        />
-      ))}
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-2">Practice Dashboard</h1>
+      <p className="text-gray-700 mb-4">Practice ID: {practice.id}</p>
+      <hr className="mb-6" />
+  
+      {/* Grid Container */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {playerStats.map((player) => (
+          <PlayerCard
+            key={player.playerId}
+            playerId={player.playerId}
+            playerName={player.name}
+            practiceId={practice.id}
+            stats={{
+              completedPasses: player.completedPasses,
+              droppedBalls: player.droppedBalls,
+            }}
+            onStatUpdated={(updatedStats) =>
+              handleStatUpdated(player.playerId, updatedStats)
+            }
+            // Pass additional Tailwind classes if PlayerCard accepts the
+          />
+        ))}
+      </div>
     </div>
   );
+  
 };
 
 export default PracticeDashboard;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_PRACTICE } from '../utils/mutations';
-import PreviousPractices from './PreviousPractices';
+// import PreviousPractices from './PreviousPractices';
 import PracticeDashboard from './PracticeDashboard';
 import AuthService from '../utils/auth';
 
@@ -52,13 +52,13 @@ const CoachDashboard = () => {
   };
 
   return (
-    <div>
-      <h1>Coach Dashboard</h1>
-      <p>Welcome, Coach!</p>
+    <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden flex flex-col justify-center items-center p-6">
+      
+      <h1 className="text-xl font-semibold mb-2">Welcome, Coach!</h1>
       <p>This is your dashboard where you can:</p>
 
       {/* 6) Button to create / close a new practice */}
-      <button id="startPractice" onClick={handleClickNewPractice}>
+      <button id="startPractice" onClick={handleClickNewPractice} className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white">
         {isPracticeOpen ? 'Close new practice' : 'Start a new practice'}
       </button>
 
@@ -70,14 +70,14 @@ const CoachDashboard = () => {
       )}
 
       {/* 8) Button to show previous practices */}
-      <button id="previousPractices" onClick={handleClickPreviousPractices}>
+      <button id="previousPractices" onClick={handleClickPreviousPractices} className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white">
         {isPreviousOpen ? 'Close previous practices' : 'See previous practices'}
       </button>
 
       {/* 9) Render the previous practices if toggled on */}
       {isPreviousOpen && coachId && (
         <div>
-          <PreviousPractices/>
+          {/* <PreviousPractices/> */}
         </div>
       )}
     </div>
