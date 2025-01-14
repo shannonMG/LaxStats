@@ -22,39 +22,49 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   onStatUpdated,
 }) => {
   return (
-    <div style={{ border: '1px solid #ccc', padding: '8px', margin: '8px' }}>
-      <h3>{playerName}</h3>
-      <div>
+    <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden flex flex-col justify-center items-center p-6">
+      {/* Player Name */}
+      <h3 className="text-2xl font-bold mb-4">{playerName}</h3>
+
+      {/* Completed Passes */}
+      <div className="flex items-center mb-4">
         <StatButton
           practiceId={practiceId}
           playerId={playerId}
           statName="completedPasses"
           increment={1}
           onStatUpdated={onStatUpdated}
+          
         />
-        <p>Completed Passes: {stats.completedPasses}</p>
+        <p className="mx-2 text-lg">Completed Passes: {stats.completedPasses}</p>
         <StatButton
           practiceId={practiceId}
           playerId={playerId}
           statName="completedPasses"
           increment={-1}
           onStatUpdated={onStatUpdated}
+          
         />
-        <br />
+      </div>
+
+      {/* Dropped Balls */}
+      <div className="flex items-center">
         <StatButton
           practiceId={practiceId}
           playerId={playerId}
           statName="droppedBalls"
           increment={1}
           onStatUpdated={onStatUpdated}
+          
         />
-        <p>Dropped Balls: {stats.droppedBalls}</p>
+        <p className="mx-2 text-lg">Dropped Balls: {stats.droppedBalls}</p>
         <StatButton
           practiceId={practiceId}
           playerId={playerId}
           statName="droppedBalls"
           increment={-1}
           onStatUpdated={onStatUpdated}
+          
         />
       </div>
     </div>

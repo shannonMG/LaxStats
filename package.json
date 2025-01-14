@@ -26,6 +26,8 @@
     "wait-on": "^7.2.0"
   },
   "dependencies": {
-    "main": "file:"
+    "dayjs": "^1.11.13",
+    "main": "file:",
+    "tailwinds": "^0.0.0"
   }
 }

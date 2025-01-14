@@ -14,10 +14,14 @@ export const QUERY_ME = gql`
 `;
 
 export const GET_PLAYER_STATS = gql`
-  query GetPlayerStatsById($practiceId: ID!, $playerId: ID!) {
+query Query($practiceId: ID!, $playerId: ID!) {
   getPlayerStatsById(practiceId: $practiceId, playerId: $playerId) {
     completedPasses
     droppedBalls
+    player {
+      _id
+      name
+    }
   }
 }
 `
