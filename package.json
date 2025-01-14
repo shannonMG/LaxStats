@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.13",
-    "main": "file:"
+    "main": "file:",
+    "tailwinds": "^0.0.0"
   }
 }

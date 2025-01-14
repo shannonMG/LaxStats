@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { QUERY_PRACTICES_FOR_COACH } from '../utils/queries';
 import auth from '../utils/auth';
-import {useState} from 'react';
+
 
 const PreviousPractices = () => {
    
