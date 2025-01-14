@@ -52,34 +52,36 @@ const CoachDashboard = () => {
   };
 
   return (
-    <div>
-      <h1>Coach Dashboard</h1>
-      <p>Welcome, Coach!</p>
-      <p>This is your dashboard where you can:</p>
+    <div >
+      <h1 className="px-2 text-xl font-bold text-navy-700 dark:text-white">Coach Dashboard</h1>
+      <p className="px-2 text-m font-bold text-navy-700 dark:text-white">Welcome, Coach!</p>
+      <p className="mt-2 px-2 text-base text-gray-600">This is your dashboard where you can:</p>
 
       {/* 6) Button to create / close a new practice */}
-      <button id="startPractice" onClick={handleClickNewPractice}>
-        {isPracticeOpen ? 'Close new practice' : 'Start a new practice'}
-      </button>
+      <div className="gap-4 px-2 w-full">
+        <button id="startPractice" onClick={handleClickNewPractice} className="bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-2 px-4 border-b-4 border-black-700 hover:border-black-500 rounded">
+          {isPracticeOpen ? 'Close new practice' : 'Start a new practice'}
+        </button>
 
-      {/* 7) Render the PracticeDashboard if open AND we have a valid practice object */}
-      {isPracticeOpen && practice && (
-        <div>
-          <PracticeDashboard practice={practice} />
-        </div>
-      )}
+        {/* 7) Render the PracticeDashboard if open AND we have a valid practice object */}
+        {isPracticeOpen && practice && (
+          <div>
+            <PracticeDashboard practice={practice} />
+          </div>
+        )}
 
-      {/* 8) Button to show previous practices */}
-      <button id="previousPractices" onClick={handleClickPreviousPractices}>
-        {isPreviousOpen ? 'Close previous practices' : 'See previous practices'}
-      </button>
+        {/* 8) Button to show previous practices */}
+        <button id="previousPractices" onClick={handleClickPreviousPractices} className="bg-cyan-500 hover:bg-cyan-400 text-white font-bold py-2 px-4 border-b-4 border-black-700 hover:border-black-500 rounded">
+          {isPreviousOpen ? 'Close previous practices' : 'See previous practices'}
+        </button>
 
-      {/* 9) Render the previous practices if toggled on */}
-      {isPreviousOpen && coachId && (
-        <div>
-          <PreviousPractices/>
-        </div>
-      )}
+        {/* 9) Render the previous practices if toggled on */}
+        {isPreviousOpen && coachId && (
+          <div>
+            <PreviousPractices/>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
