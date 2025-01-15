@@ -19,7 +19,15 @@ Note, however that this app also requires certain dependencies, such as 'dayjs',
 On the website, users can sign up as either a coach or a player. Once they log in, they'll be presented with a unique dashboard to see a display of stats. As a coach, the user can create a new practice and keep track of every player's Completed Passes & Dropped Balls. This data is then stored in a database for later reference. As a player, a user can view their performance in each practice by hovering over the practice card. 
 A demo video has been included below, as well as a number of screenshots of the app's functionality:
 
+![LaxStats Login Page](./client/src/assets/LaxStats_Login.jpg)
 
+![LaxStats Signup Page](./client/src/assets/SignUpPage.jpg)
+
+![LaxStats Coach Dashboard Page, New Practice](./client/src/assets/CoachDashboardNewPractice.jpg)
+
+![LaxStats Coach Dashboard Page, Previous Practices](./client/src/assets/CoachDashboardPreviousPractices.jpg)
+
+![LaxStats Player Dashboard Page](./client/src/assets/PlayerDashboard.jpg)
 
 ## Credits
 This project has been collectively developed by Shannon Mastrogiovanni, Shuki Kathuria, James Swanson, & Chat "Snoop Dogg" GPT. Emails and GitHub repos are included below.
@@ -31,4 +39,4 @@ While this project has achieved MVP, there are features both interactable and ae
 Download the repo locally and add any features that you'd find useful - just be sure to give proper credit!
 
 ## Questions
-Have questions? Visit [the GitHub repo](https://github.com/shannonMG/LaxStats), our GitHub repose at [shukikat](https://github.com/shukikat), [shannonMG](https://github.com/shannonMG), & [Majexs](https://github.com/Majexs) or email us at [kathuriashuki@gmail.com](mailto:kathuriashuki@gmail.com), [shannonmastrogiovanni@gmail.com](mailto:shannonmastrogiovanni@gmail.com), & [majexs@gmail.com](mailto:majexs@gmail.com).
+Have questions? Visit [the LaxStat GitHub repo](https://github.com/shannonMG/LaxStats), our personal GitHub repos at [shukikat](https://github.com/shukikat), [shannonMG](https://github.com/shannonMG), & [Majexs](https://github.com/Majexs) or email us at [kathuriashuki@gmail.com](mailto:kathuriashuki@gmail.com), [shannonmastrogiovanni@gmail.com](mailto:shannonmastrogiovanni@gmail.com), & [majexs@gmail.com](mailto:majexs@gmail.com).
