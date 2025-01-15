@@ -9,7 +9,7 @@ const Header = () => {
         Auth.logout();
     };
     return (
-        <nav className="bg-cyan-400 border border-gray-200 dark:border-gray-700 px-2 sm:px-4 py-8 rounded dark:bg-gray-800 shadow">
+        <nav className="bg-hunter-green text-white border border-gray-200 dark:border-gray-700 px-2 sm:px-4 py-8 rounded dark:bg-gray-800 shadow">
             <div className="container flex flex-wrap justify-between items-center mx-auto">
                 <a href="/" className="flex items-center">
                     <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
@@ -17,7 +17,7 @@ const Header = () => {
                      <Link to='/'>
                          <h1>LaxStats</h1>
                      </Link>
-                     <p className="text-xs">Track your teams stats here! Or something idk...</p>
+                     <p className="text-xs">Track. Analyze. Dominate.</p>
                  </div>
                     </span>
                 </a>
