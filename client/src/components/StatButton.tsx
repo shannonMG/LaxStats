@@ -56,7 +56,21 @@ const StatButton: React.FC<StatButtonProps> = ({
   };
 
   return (
-    <button onClick={handleClick} className="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white">
+    <button onClick={handleClick} className="
+            rounded 
+            px-4 
+            py-2 
+            m-2 
+            border-b-4 
+            border-fern-green 
+            bg-fern-green 
+            text-white
+            hover:bg-hunter-green 
+            hover:border-hunter-green 
+            shadow-lg 
+            transition-colors 
+            duration-200
+          ">
       {increment > 0 ? '+' : '-'}
     </button>
   );
