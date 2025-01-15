@@ -47,7 +47,7 @@ const Login = () => {
               "url('https://mountathletics.com/images/2021/5/13/MSM_050821_WLAX_125.jpg')",
           }}
         >
-          <div className="rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
+          <div className="rounded-xl bg-fern-green bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
             <div className="text-white">
               <div className="mb-8 flex flex-col items-center">
                 {/* <img src="..." width="150" alt="" /> */}

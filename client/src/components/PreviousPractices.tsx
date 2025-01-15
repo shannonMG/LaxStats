@@ -23,13 +23,31 @@ const PreviousPractices = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-teal-100 via-teal-300 to-teal-500">
-      <div className="w-full max-w-lg px-10 py-8 bg-white rounded-lg shadow-xl">
-        <h2 className="text-xl font-semibold mb-4">Previous Practices</h2>
+    <div
+      className=" container 
+      mx-auto 
+      p-4 
+      flex 
+      flex-col 
+      items-center
+      justify-center"
+    >
+    <div
+      className="
+        rounded-xl 
+        shadow-xl
+        w-full
+        max-w-[800px]
+        max-h-[600px]
+        overflow-y-auto
+        "
+      >
+        <div className= "grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 grid-rows-6 ">
+           
         {practices.length === 0 ? (
           <p className="text-gray-500">No practices found.</p>
         ) : (
-          practices.map((practice:any) => {
+          practices.map((practice: any) => {
             const isOpen = openPracticeId === practice.id;
             return (
               <div
@@ -61,6 +79,7 @@ const PreviousPractices = () => {
                     />
                   </svg>
                 </div>
+  
                 {isOpen && (
                   <div className="mt-4">
                     <div className="mt-2">
@@ -89,7 +108,8 @@ const PreviousPractices = () => {
         )}
       </div>
     </div>
+    </div>
   );
-};
+}
 
 export default PreviousPractices;

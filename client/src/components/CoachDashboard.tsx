@@ -54,10 +54,11 @@ const CoachDashboard = () => {
   >
     <div
       className="
-        w-full 
-        max-w-lg 
+      p-8
+        max-w-full
+        m-6
         mx-auto 
-        mb-8 flex flex-col items-center
+        flex flex-col items-center
         bg-moss-green 
         bg-opacity-50 
         text-dark-green 
@@ -66,9 +67,7 @@ const CoachDashboard = () => {
         overflow-hidden 
         flex 
         flex-col 
-        items-center 
-        px-16 
-        py-10 
+        items-center
         backdrop-blur-md 
         max-sm:px-8
         

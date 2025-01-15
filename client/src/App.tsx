@@ -31,17 +31,21 @@ const client = new ApolloClient({
 });
 
 function App() {
-    return (
-        <ApolloProvider client={client}>
-            <div>
-                <Header />
-                <div>
-                    <Outlet />
-                </div>
-                <Footer />
-            </div>
-        </ApolloProvider>
-    );
+  return (
+    <ApolloProvider client={client}>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+
+        {/* Main content area */}
+         <main>
+          {/* Any child routes will render here */}
+          <Outlet />
+        </main>
+
+        <Footer />
+      </div>
+    </ApolloProvider>
+  );
 }
 
 export default App;
