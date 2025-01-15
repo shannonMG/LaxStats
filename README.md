@@ -19,6 +19,8 @@ Note, however that this app also requires certain dependencies, such as 'dayjs',
 On the website, users can sign up as either a coach or a player. Once they log in, they'll be presented with a unique dashboard to see a display of stats. As a coach, the user can create a new practice and keep track of every player's Completed Passes & Dropped Balls. This data is then stored in a database for later reference. As a player, a user can view their performance in each practice by hovering over the practice card. 
 A demo video has been included below, as well as a number of screenshots of the app's functionality:
 
+https://drive.google.com/file/d/1Ey4vNvd00uooV62E2-b1NK-_b0nSvvVx/view
+
 ![LaxStats Login Page](./client/src/assets/LaxStats_Login.jpg)
 
 ![LaxStats Signup Page](./client/src/assets/SignUpPage.jpg)
