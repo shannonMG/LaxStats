@@ -49,21 +49,21 @@ const Signup = () => {
     };
 
     return(
-        <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style={{
+        <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat text-dark-green" style={{
             // backgroundImage: "url('https://images.unsplash.com/photo-1499123785106-343e69e68db1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80')"
             backgroundImage: "url('https://images.unsplash.com/photo-1526649172339-5c979f9941a3?q=80&w=1977&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
         }}>
-            <div className="rounded-xl bg-fern-green bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
+            <div className="rounded-xl bg-fern-green text-black bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8">
                 <div className="text-white">
-                    <div className="mb-8 flex flex-col items-center">
+                    <div className="mb-8 flex flex-col items-center text-dark-green">
                         {/* <img src="https://www.logo.wine/a/logo/Instagram/Instagram-Glyph-Color-Logo.wine.svg" width="150" alt="" srcset="" /> */}
-                        <h1 className="mb-2 text-2xl">Sign Up</h1>
-                        <span className="text-gray-300">Enter SignUp Details</span>
+                        <h1 className="mb-2 text-2xl text-dark-green">Sign Up</h1>
+                        <span className="text-dark-green">Enter SignUp Details</span>
                     </div>
-                    <form onSubmit={handleFormSubmit}>
+                    <form onSubmit={handleFormSubmit} className="text-dark-green">
                         <div className="mb-4 text-lg">
                             <input
-                                className="rounded-3xl border-none bg-mindaro/50 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
+                                className="rounded-3xl text-dark-green border-none bg-mindaro/50 bg-opacity-50 px-6 py-2 text-center text-dark-green placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
                                 type="text"
                                 placeholder="Name"
                                 name="name"
@@ -71,9 +71,9 @@ const Signup = () => {
                                 onChange={handleChange} />
                         </div>
 
-                        <div className="mb-4 text-lg">
+                        <div className="mb-4 text-lg text-dark-green">
                             <input
-                                className="rounded-3xl border-none bg-mindaro/50 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
+                                className="rounded-3xl text-dark-green border-none bg-mindaro/50 bg-opacity-50 px-6 py-2 text-center placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
                                 type="Password"
                                 placeholder="********"
                                 name="password"
@@ -102,7 +102,7 @@ const Signup = () => {
                                 onChange={handleChange} />
                         </div>
                         <div className="mt-8 flex justify-center text-lg text-black">
-                            <button type="submit" className="rounded-3xl bg-mindaro/50 bg-opacity-50 px-10 py-2 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-yellow-600">Sign Up</button>
+                            <button type="submit" className="rounded-3xl bg-mindaro/50 bg-opacity-50 px-10 py-2 text-dark-green shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-yellow-600">Sign Up</button>
                         </div>
                     </form>
                 </div>
