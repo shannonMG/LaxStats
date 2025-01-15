@@ -38,7 +38,7 @@ const PreviousPractices = () => {
         shadow-xl
         w-full
         max-w-[800px]
-        max-h-[600px]
+        max-h-[400px]
         overflow-y-auto
         "
       >
