@@ -2,10 +2,11 @@ import Practice from '../../models/Practice.js'; // Import the Practice model
 import User from '../../models/User.js'; // Import the User model
 import { AuthenticationError } from 'apollo-server-errors'; // Import Apollo error for authentication issues
 import { Document, Types } from 'mongoose'; // Import Mongoose types for type-checking
+import dayjs from 'dayjs';
 
 // Define the structure of PlayerStats: stats that belong to each player in practice
 interface PlayerStats {
-  playerId: Types.ObjectId | {_id: string; name: string};         // The ID of the player
+  playerId: Types.ObjectId | { _id: string; name: string };         // The ID of the player
   droppedBalls: number;     // The number of dropped balls by the player
   completedPasses: number;  // The number of completed passes by the player
 }
@@ -70,7 +71,7 @@ const practiceResolvers = {
         throw new Error('Failed to fetch practices');
       }
     },
-    
+
     getPlayerStatsById: async (_parent: any, { practiceId, playerId }: PlayerStatsArgs) => {
       try {
         // Validate IDs
@@ -80,7 +81,7 @@ const practiceResolvers = {
         if (!Types.ObjectId.isValid(playerId)) {
           throw new Error('Invalid playerId format.');
         }
-  
+
         // Step 1: Find the practice document by its ID and populate player details
         const practice = await Practice.findById(practiceId).populate({
           path: 'players.playerId',
@@ -97,97 +98,105 @@ const practiceResolvers = {
           (player) => player.playerId && player.playerId._id.toString() === playerId
         );
         console.log('Player stats:', playerStats);
-  
+
         if (!playerStats || !(playerStats.playerId as { _id: string; name: string }).name) {
           throw new Error('Player stats or player name not found in this practice.');
         }
-  
-        
+
+
         return {
           playerId: {
-          _id: playerStats.playerId._id.toString(), // User ID from the populated player document
-          name: (playerStats.playerId as { _id: string; name: string }).name // Player's name from the populated player document
+            _id: playerStats.playerId._id, // User ID from the populated player document
+            name: (playerStats.playerId as { _id: string; name: string }).name // Player's name from the populated player document
           },
           droppedBalls: playerStats.droppedBalls,
           completedPasses: playerStats.completedPasses,
         };
       } catch (error) {
         if (error instanceof Error)
-        console.error('Error fetching player stats:', error.message);
+          console.error('Error fetching player stats:', error.message);
         throw new Error('Failed to fetch player stats.');
       }
     },
-    
+
     getPracticesForPlayer: async (_parent: any, { playerId }: { playerId: string }) => {
       try {
         // Find all practices that this player is part of
         const playerPractices = await Practice.find({ 'players.playerId': playerId });
-    
+
         // If no practices are found, you can decide what to return:
         if (!playerPractices || playerPractices.length === 0) {
           return []; // return an empty array, or you could throw an error
         }
-    
+
         // Return an array of practices, possibly including the player's specific stats
         return playerPractices.map((practice) => {
           const playerStats = practice.players.find((player) => player.playerId.toString() === playerId);
 
-        if (!playerStats) {
-          throw new Error('Player stats not found.');
-        }
+          if (!playerStats) {
+            throw new Error('Player stats not found.');
+          }
 
-        // Now `playerStats` is guaranteed to be defined.
-        return {
-          practiceId: practice._id,
-          droppedBalls: playerStats.droppedBalls,
-          completedPasses: playerStats.completedPasses,
-        };
+          console.log({
+            practiceId: practice._id,
+            droppedBalls: playerStats.droppedBalls,
+            completedPasses: playerStats.completedPasses,
+            date: dayjs(practice.date).format("dddd MMMM DD, YYYY h:00 a")
+          })
+
+          // Now `playerStats` is guaranteed to be defined.
+          return {
+            practiceId: practice._id,
+            droppedBalls: playerStats.droppedBalls,
+            completedPasses: playerStats.completedPasses,
+            date: dayjs(practice.date).format("dddd MMMM DD, YYYY h:00 a")
+          };
         });
       } catch (error) {
         console.error('Error fetching practices for player:', error);
         throw new Error('Failed to fetch practices for player.');
       }
     },
-    
-  
+
+
     getPracticesByCoach: async (_parent: any, { coachId }: { coachId: string }) => {
       try {
         console.log('Fetching practices for coach ID:', coachId);
-    
+
         // Query practices and populate player data
         const practices = await Practice.find({ coach: coachId }).populate({
           path: 'players.playerId',
           select: 'name', // Only include the name field
         });
-    
+
         console.log('Practices fetched:', practices);
-    
+
         if (!practices || practices.length === 0) {
           console.error('No practices found for coach ID:', coachId);
           throw new Error('No practices found for this coach.');
         }
-    
+
         return practices;
       } catch (error) {
         console.error('Error in getPracticesByCoach:', error);
         throw new Error('Failed to fetch practices for this coach.');
       }
     },
-    
-},
-  
+
+  },
+
 
 
   PlayerStats: {
-      // Mark the param type:
-      player: async (
-        parent: PlayerStatsParent,
-      ) => {
-        // Now TypeScript won't complain about `parent` being implicitly any
-        return parent.playerId;
-      },
+    // Mark the param type:
+    player: async (
+      parent: PlayerStatsParent,
+    ) => {
+      // Now TypeScript won't complain about `parent` being implicitly any
+      return parent.playerId;
     },
-  
+  },
+
 
   Mutation: {
     addPractice: async (_: any, __: AddPracticeArgs, context: Context): Promise<IPractice> => {
@@ -221,7 +230,7 @@ const practiceResolvers = {
           droppedBalls: 0,                 // Initialize droppedBalls to 0
           completedPasses: 0,              // Initialize completedPasses to 0
         }));
-    
+
         // Create a new instance of the Practice model with the current date, coach ID, and player stats
         const newPractice = new Practice({
           date: currentDate,   // Set the date to the current date
@@ -254,35 +263,35 @@ const practiceResolvers = {
       }
     },
 
-    updatePlayerStat: async (_parent: unknown,{ practiceId, playerId, statName, increment }: UpdatePlayerStatArgs ) => {
-          if (!['droppedBalls', 'completedPasses'].includes(statName)) {
-            throw new Error('Invalid stat name');
-          }
+    updatePlayerStat: async (_parent: unknown, { practiceId, playerId, statName, increment }: UpdatePlayerStatArgs) => {
+      if (!['droppedBalls', 'completedPasses'].includes(statName)) {
+        throw new Error('Invalid stat name');
+      }
 
-          const updateField = `players.$.${statName}`;
+      const updateField = `players.$.${statName}`;
 
-          const updatedPractice = await Practice.findOneAndUpdate(
-            { _id: practiceId, 'players.playerId': playerId },
-            { $inc: { [updateField]: increment } },
-            { new: true }
-          );
+      const updatedPractice = await Practice.findOneAndUpdate(
+        { _id: practiceId, 'players.playerId': playerId },
+        { $inc: { [updateField]: increment } },
+        { new: true }
+      );
 
-          if (!updatedPractice) {
-            throw new Error('Player or practice not found');
-          }
-          const populatedPractice = await Practice.findById(updatedPractice._id).populate({
-              path: 'players.playerId', // Populate the playerId reference
-              select: 'name', // Only include the `name` field from the User model
-            });
+      if (!updatedPractice) {
+        throw new Error('Player or practice not found');
+      }
+      const populatedPractice = await Practice.findById(updatedPractice._id).populate({
+        path: 'players.playerId', // Populate the playerId reference
+        select: 'name', // Only include the `name` field from the User model
+      });
 
-            if (!populatedPractice) {
-              throw new Error('Updated practice not found after population');
-            }
+      if (!populatedPractice) {
+        throw new Error('Updated practice not found after population');
+      }
 
-            return populatedPractice;
-          },
-            },
-          };
-        
+      return populatedPractice;
+    },
+  },
+};
+
 
 export default practiceResolvers; // Export the resolvers

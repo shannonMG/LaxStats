@@ -8,6 +8,7 @@ import Auth from '../utils/auth';
 
 const Login = () => {
     const [formState, setFormState] = useState({ username: '', password: '' });
+    const [showError, setShowError] = useState(false)
     const [login] = useMutation(LOGIN_USER);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,7 @@ const Login = () => {
             Auth.login(data.login.token);
         } catch (e) {
             console.log(e);
+            setShowError(true)
         }
 
         setFormState({
